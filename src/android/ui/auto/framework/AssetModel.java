@@ -22,6 +22,7 @@ public class AssetModel {
 				String argsStr = action.substring(action.indexOf("(") + 1, action.indexOf(")"));
 				caseNode.action = AndroidActionCommandType.getActionFromStr(actionStr);
 				String[] argStr = argsStr.split(",");
+				caseNode.actionStr = actionStr;
 				caseNode.arg = argStr[0];
 				caseNode.args = argStr;
 				caseNodes.add(caseNode);

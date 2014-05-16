@@ -53,7 +53,7 @@ public class AndroidActionCommandType {
 			return AndroidActionCommandType.DEVICEINFO;
 		} else if (temp.equals("FINISH")) {
 			return AndroidActionCommandType.FINISH;
-		} else if (temp.equals("SEE")) {
+		} else if (temp.startsWith("SEE")) {
 			return AndroidActionCommandType.SEE;
 		} else if (temp.equals("WAITTODISAPPEAR")) {
 			return AndroidActionCommandType.WAITTODISAPPEAR;

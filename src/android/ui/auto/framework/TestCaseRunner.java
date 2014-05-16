@@ -24,6 +24,7 @@ public class TestCaseRunner {
 	}
 
 	public void start() {
+		testCase.reset();
 		new Thread(new Runnable() {
 
 			@Override
@@ -129,7 +130,6 @@ public class TestCaseRunner {
 				break;
 			}
 		}
-
 	}
 
 	public synchronized void sendRequest(final AndroidActionCommand actionCommandResult) {

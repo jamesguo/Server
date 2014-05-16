@@ -102,6 +102,7 @@ public class TestCase {
 							String actionName = temp.substring(0, temp.indexOf("("));
 							String args = temp.substring(temp.indexOf("(") + 1, temp.indexOf(")"));
 							caseNode.action = AndroidActionCommandType.getActionFromStr(actionName);
+							caseNode.actionStr = actionName;
 							caseNode.arg = args;
 							caseStep.actions.add(caseNode);
 						}
@@ -117,10 +118,27 @@ public class TestCase {
 							String actionName = temp.substring(0, temp.indexOf("("));
 							String args = temp.substring(temp.indexOf("(") + 1, temp.indexOf(")"));
 							caseNode.action = AndroidActionCommandType.getActionFromStr(actionName);
+							caseNode.actionStr = actionName;
 							caseNode.arg = args;
 							caseStep.actions.add(caseNode);
 						}
 						testSteps.put("error", caseStep);
+					} else if (((String) key).equals("waitProcess")) {
+						String actionStr = getProperty("waitProcess").trim();
+						TestCaseStep caseStep = new TestCaseStep(this);
+						caseStep.name = "waitProcess";
+						String[] actions = actionStr.split(";");
+						for (String action : actions) {
+							String temp = action.trim();
+							TestCaseNode caseNode = new TestCaseNode(this);
+							String actionName = temp.substring(0, temp.indexOf("("));
+							String args = temp.substring(temp.indexOf("(") + 1, temp.indexOf(")"));
+							caseNode.action = AndroidActionCommandType.getActionFromStr(actionName);
+							caseNode.actionStr = actionName;
+							caseNode.arg = args;
+							caseStep.actions.add(caseNode);
+						}
+						testSteps.put("waitProcess", caseStep);
 					}
 				}
 			}
@@ -136,12 +154,19 @@ public class TestCase {
 		AndroidActionCommand actionCommand = currentStep.runNextNode(cmd);
 		if (actionCommand == null) {
 			try {
+				TestCaseStep lastCaseStep = currentStep;
 				currentStep = caseStepArray.poll(3, TimeUnit.SECONDS);
 				while (currentStep.limitTime <= currentStep.excuteTime) {
 					currentStep.assetModel.goToFail();
 					currentStep = caseStepArray.poll(3, TimeUnit.SECONDS);
 				}
-				actionCommand = currentStep.runNextNode(new AndroidActionCommand());
+				if (lastCaseStep.name.equals("waitProcess")) {
+					AndroidActionCommand androidActionCommand = new AndroidActionCommand();
+					androidActionCommand.result = 1;
+					actionCommand = currentStep.runNextNode(androidActionCommand);
+				} else {
+					actionCommand = currentStep.runNextNode(new AndroidActionCommand());
+				}
 			} catch (InterruptedException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();

@@ -91,9 +91,17 @@ public class TestCaseNode {
 			}
 			break;
 		case AndroidActionCommandType.FIND:
-			paramObject.put("findType", 1);
+			if (preResponse.actionCode == AndroidActionCommandType.CLICK) {
+				try {
+					Thread.sleep(500);
+				} catch (Exception e) {
+					// TODO: handle exception
+				}
+			}
 			if (actionStr.toUpperCase().equals("FINDVIEW")) {
 				paramObject.put("findType", 0);
+			} else {
+				paramObject.put("findType", 1);
 			}
 			paramObject.put("value", arg);
 			paramObject.put("multiple", true);
@@ -107,7 +115,18 @@ public class TestCaseNode {
 
 			break;
 		case AndroidActionCommandType.SEE:
-			paramObject.put("findType", 1);
+			if (preResponse.actionCode == AndroidActionCommandType.CLICK) {
+				try {
+					Thread.sleep(500);
+				} catch (Exception e) {
+					// TODO: handle exception
+				}
+			}
+			if (actionStr.toUpperCase().equals("SEEVIEW")) {
+				paramObject.put("findType", 0);
+			} else {
+				paramObject.put("findType", 1);
+			}
 			paramObject.put("value", arg);
 			paramObject.put("multiple", true);
 			jsonObject.put("params", paramObject.toString());
@@ -157,7 +176,11 @@ public class TestCaseNode {
 
 	public void assetSuccess() {
 		if (args != null) {
-			testCase.caseStepArray.add(testCase.testSteps.get(args[1].trim().replace("goto:", "")));
+			String target = args[1].trim().replace("goto:", "");
+			testCase.caseStepArray.add(testCase.testSteps.get(target));
+			if (target.equals("waitProcess")) {
+				testCase.caseStepArray.add(testCase.currentStep);
+			}
 		}
 	}
 }

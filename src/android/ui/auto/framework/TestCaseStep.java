@@ -32,12 +32,15 @@ public class TestCaseStep {
 			// 正常执行的结果
 			if (cmd.result == 1) {
 				// 失败
+				if (name.equals("waitProcess")) {
+					return null;
+				}
 				if (errorModel == null) {
 					errorModel = new ErrorModel(testCase, "goto:error");
 				}
 				errorModel.goError();
 				excuteTime = excuteTime + 1;
-				LogUtil.debug(testCase, "[" + testCase.name + "]" + "第" + excuteTime + "次执行" + "[" + name + "]" + "的第" + (currentAction + 1) + "操作失败:" + cmd.body);
+				LogUtil.debug(testCase, "[" + testCase.name + "]" + "第" + excuteTime + "次执行" + "[" + name + "]" + "的第" + (currentAction) + "操作失败:" + cmd.body);
 				currentAction = -1;
 				return null;
 			} else {
@@ -60,6 +63,10 @@ public class TestCaseStep {
 						}
 					} else {
 						excuteTime = excuteTime + 1;
+						if (name.equals("waitProcess")) {
+							currentAction = -1;
+							return null;
+						}
 						LogUtil.debug(testCase, "[" + testCase.name + "]" + "第" + excuteTime + "次执行" + "[" + name + "]" + "缺少 验证指令");
 						currentAction = -1;
 						return null;
@@ -90,10 +97,15 @@ public class TestCaseStep {
 			}
 		} else {
 			if (cmd.result == 0) {
-				excuteTime = excuteTime + 1;
-				LogUtil.debug(testCase, "[" + testCase.name + "]" + "第" + excuteTime + "次执行" + "[" + name + "]第" + (assetModel.currentOffset + 1) + "验证成功");
-				assetModel.goToSuccess();
-				currentAction = -1;
+				String target = assetModel.getCurrent().args[1].trim().replace("goto:", "");
+				if (target.equals("waitProcess")) {
+					assetModel.getCurrent().assetSuccess();
+				} else {
+					assetModel.goToSuccess();
+					excuteTime = excuteTime + 1;
+					LogUtil.debug(testCase, "[" + testCase.name + "]" + "第" + excuteTime + "次执行" + "[" + name + "]第" + (assetModel.currentOffset + 1) + "验证成功");
+					currentAction = -1;
+				}
 				return null;
 			} else {
 				TestCaseNode node;
@@ -108,9 +120,10 @@ public class TestCaseStep {
 				if (node.action == AndroidActionCommandType.SEE && node.arg.isEmpty()) {
 					String target = node.args[1].trim().replace("goto:", "");
 					if (target.equals("continue")) {
-						return runNextNode(cmd);
+						return null;
 					} else {
 						assetModel.goToSuccess();
+						currentAction = -1;
 						return null;
 					}
 				}
