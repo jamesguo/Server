@@ -33,6 +33,7 @@ public class TestCaseStep {
 			if (cmd.result == 1) {
 				// 失败
 				if (name.equals("waitProcess")) {
+					currentAction = -1;
 					return null;
 				}
 				if (errorModel == null) {
@@ -100,11 +101,14 @@ public class TestCaseStep {
 				String target = assetModel.getCurrent().args[1].trim().replace("goto:", "");
 				if (target.equals("waitProcess")) {
 					assetModel.getCurrent().assetSuccess();
+					LogUtil.debug(testCase, "[" + testCase.name + "]" + "第" + (excuteTime + 1) + "次执行" + "[" + name + "] waitProcess 验证成功");
+					LogUtil.error(testCase, "Step 队列中剩余" + testCase.caseStepArray.size() + "个操作，下一个操作为" + (testCase.caseStepArray.size() > 0 ? ("" + testCase.caseStepArray.peek().name) : ""));
 				} else {
-					assetModel.goToSuccess();
+					assetModel.getCurrent().assetSuccess();
 					excuteTime = excuteTime + 1;
 					LogUtil.debug(testCase, "[" + testCase.name + "]" + "第" + excuteTime + "次执行" + "[" + name + "]第" + (assetModel.currentOffset + 1) + "验证成功");
 					currentAction = -1;
+					assetModel.currentOffset = -1;
 				}
 				return null;
 			} else {

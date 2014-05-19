@@ -8,6 +8,7 @@ import java.net.Socket;
 
 import android.ui.auto.framework.command.AndroidActionCommand;
 import android.ui.auto.framework.command.AndroidActionCommandType;
+import android.ui.auto.framework.log.LogUtil;
 import android.ui.auto.framework.util.CommondProcoltolUtil;
 import android.ui.auto.framework.util.TypeConvertUtil;
 
@@ -24,24 +25,26 @@ public class TestCaseRunner {
 	}
 
 	public void start() {
-		testCase.reset();
+		testCase.reset(true);
+		if (testCase != null && testCase.testSteps.size() > 0) {
+			testCase.startCase();
+		}
 		new Thread(new Runnable() {
 
 			@Override
 			public void run() {
 				listener();
-				testCase.reset();
+				LogUtil.error(testCase, "=======================分割线=========================");
+				// testCase.reset(false);
 				try {
 					client.close();
 				} catch (Exception e) {
 					e.printStackTrace();
 				}
 			}
-		}, "TestCaseRunnerListener" + testCase.name).start();
-		if (testCase != null && testCase.testSteps.size() > 0) {
-			testCase.startCase();
-			runCommand(new AndroidActionCommand());
-		}
+		}, "TestCaseRunnerListener" + LogUtil.getFormatTime() + testCase.name).start();
+		LogUtil.error(testCase, "开始执行Case Step 队列中剩余" + testCase.caseStepArray.size() + "个操作，下一个操作为" + (testCase.caseStepArray.size() > 0 ? ("" + testCase.caseStepArray.peek().name) : ""));
+		runCommand(new AndroidActionCommand());
 
 	}
 
@@ -145,7 +148,7 @@ public class TestCaseRunner {
 		}
 	}
 
-	private void runCommand(final AndroidActionCommand cmd) {
+	private synchronized void runCommand(final AndroidActionCommand cmd) {
 		// cmd.excutor();
 		if(cmd.actionCode==AndroidActionCommandType.FINISH){
 			finish = true;

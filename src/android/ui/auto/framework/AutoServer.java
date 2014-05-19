@@ -32,9 +32,9 @@ public class AutoServer {
 
 	public static synchronized TestCase getReadyTestCase() {
 		if(testCases.size()>0){
-			// TestCase testCase = testCases.get(1);
-			TestCase testCase = testCases.remove(0);
-			runningTest.add(testCase);
+			TestCase testCase = testCases.get(1);
+			// TestCase testCase = testCases.remove(0);
+			// runningTest.add(testCase);
 
 			return testCase;
 		}

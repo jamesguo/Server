@@ -1,5 +1,7 @@
 package android.ui.auto.framework.util;
 
+import java.text.SimpleDateFormat;
+
 public class TypeConvertUtil {
 	public static byte[] intToByte(int i) {
 		byte[] result = new byte[4];
@@ -48,5 +50,9 @@ public class TypeConvertUtil {
 		System.arraycopy(arr1, 0, submit, 0, arr1.length);
 		System.arraycopy(arr2, 0, submit, arr1.length, arr2.length);
 		return submit;
+	}
+
+	public static String getFormatImageTime() {
+		return new SimpleDateFormat("yyyy-MM-dd-HH-mm-ss").format(System.currentTimeMillis());
 	}
 }

@@ -37,7 +37,7 @@ public class TestCaseNode {
 			JSONObject json = new JSONObject(preResponse.body);
 			String imageData = json.optString("ImageData", "");
 			byte[] imageBytes = TypeConvertUtil.hexStringToBytes(imageData);
-			File image = new File(testCase.outPath + File.separatorChar + testCase.deviceName + File.separatorChar + lastCaseNode.arg);
+			File image = new File(testCase.outPath + File.separatorChar + testCase.deviceName + File.separatorChar + TypeConvertUtil.getFormatImageTime() + "_" + lastCaseNode.arg);
 			if (image.exists()) {
 				image.delete();
 			}
@@ -105,6 +105,11 @@ public class TestCaseNode {
 			}
 			paramObject.put("value", arg);
 			paramObject.put("multiple", true);
+			if(testCase.currentStep.name.equals("waitProcess")){
+				paramObject.put("timeout", 3);
+			} else {
+				paramObject.put("timeout", 10);
+			}
 			jsonObject.put("params", paramObject.toString());
 			jsonObject.put("action", "find");
 			break;

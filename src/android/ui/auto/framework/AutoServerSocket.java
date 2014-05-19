@@ -5,6 +5,8 @@ import java.net.ServerSocket;
 import java.net.Socket;
 import java.net.SocketException;
 
+import android.ui.auto.framework.log.LogUtil;
+
 public class AutoServerSocket {
 	ServerSocket serverSocket;
 	public AutoServerSocket(final int port) throws SocketException {
@@ -29,7 +31,7 @@ public class AutoServerSocket {
 						public void run() {
 							new TestCaseRunner(testCase, client).start();
 						}
-					}, "TestRunner" + testCase.name).start();
+					}, "TestRunner" + LogUtil.getFormatTime() + testCase.name).start();
 				}
 			} catch (IOException e) {
 				// TODO Auto-generated catch block

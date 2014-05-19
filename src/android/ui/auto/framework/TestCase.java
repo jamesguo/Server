@@ -10,6 +10,7 @@ import java.util.concurrent.TimeUnit;
 
 import android.ui.auto.framework.command.AndroidActionCommand;
 import android.ui.auto.framework.command.AndroidActionCommandType;
+import android.ui.auto.framework.log.LogUtil;
 
 public class TestCase {
 	public String name;
@@ -26,7 +27,7 @@ public class TestCase {
 		file.mkdirs();
 	}
 
-	public void startCase() {
+	public synchronized void startCase() {
 		TestCaseStep caseStep = testSteps.get("step1");
 		if (caseStep != null) {
 			caseStepArray.add(caseStep);
@@ -127,6 +128,7 @@ public class TestCase {
 						String actionStr = getProperty("waitProcess").trim();
 						TestCaseStep caseStep = new TestCaseStep(this);
 						caseStep.name = "waitProcess";
+						caseStep.limitTime = Integer.MAX_VALUE;
 						String[] actions = actionStr.split(";");
 						for (String action : actions) {
 							String temp = action.trim();
@@ -160,12 +162,20 @@ public class TestCase {
 					currentStep.assetModel.goToFail();
 					currentStep = caseStepArray.poll(3, TimeUnit.SECONDS);
 				}
-				if (lastCaseStep.name.equals("waitProcess")) {
-					AndroidActionCommand androidActionCommand = new AndroidActionCommand();
-					androidActionCommand.result = 1;
-					actionCommand = currentStep.runNextNode(androidActionCommand);
+				if (currentStep == null) {
+					if (lastCaseStep.name.equals("success") || lastCaseStep.name.equals("error")) {
+						LogUtil.error(this, "Test Case going to finish");
+					} else {
+						currentStep = testSteps.get("error");
+					}
 				} else {
-					actionCommand = currentStep.runNextNode(new AndroidActionCommand());
+					if (lastCaseStep.name.equals("waitProcess")) {
+						AndroidActionCommand androidActionCommand = new AndroidActionCommand();
+						androidActionCommand.result = 1;
+						actionCommand = currentStep.runNextNode(androidActionCommand);
+					} else {
+						actionCommand = currentStep.runNextNode(new AndroidActionCommand());
+					}
 				}
 			} catch (InterruptedException e) {
 				// TODO Auto-generated catch block
@@ -175,7 +185,12 @@ public class TestCase {
 		return actionCommand;
 	}
 
-	public void reset() {
+	public synchronized void reset(boolean start) {
+		if (start) {
+			LogUtil.error(this, "开始 测试 case状态回至");
+		} else {
+			LogUtil.error(this, "结束 测试 case状态回至");
+		}
 		caseStepArray.clear();
 		deviceName = "";
 		currentStep = null;

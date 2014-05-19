@@ -56,4 +56,5 @@ public class LogUtil {
 	public static String getFormatTime() {
 		return new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(System.currentTimeMillis());
 	}
+
 }
