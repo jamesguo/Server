@@ -5,13 +5,12 @@ import java.net.ServerSocket;
 import java.net.Socket;
 import java.net.SocketException;
 
-import android.ui.auto.framework.log.LogUtil;
-
 public class AutoServerSocket {
 	ServerSocket serverSocket;
 	public AutoServerSocket(final int port) throws SocketException {
 		try {
 			serverSocket = new ServerSocket(port);
+			serverSocket.setSoTimeout(0);
 		} catch (Exception e) {
 			throw new SocketException("start socket server failed on " + port);
 		}
@@ -20,18 +19,13 @@ public class AutoServerSocket {
 	public void startListener() throws SocketException {
 		while (!AutoServer.allCaseFinished) {
 			try {
-				final Socket client = serverSocket.accept();
+				Socket client = serverSocket.accept();
 				client.setSoTimeout(0);
+				System.out.println("创建新的链路");
 				final TestCase testCase = AutoServer.getReadyTestCase();
+				final Socket oneClient = client;
 				if (testCase != null) {
-
-					new Thread(new Runnable() {
-
-						@Override
-						public void run() {
-							new TestCaseRunner(testCase, client).start();
-						}
-					}, "TestRunner" + LogUtil.getFormatTime() + testCase.name).start();
+					new TestCaseThread(testCase, oneClient).start();
 				}
 			} catch (IOException e) {
 				// TODO Auto-generated catch block

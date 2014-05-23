@@ -26,13 +26,7 @@ public class TestCaseNode {
 	}
 
 	public void creatActionCommand(AndroidActionCommand nextNode, AndroidActionCommand preResponse, TestCaseNode lastCaseNode) {
-		if (arg.startsWith("$")) {
-			arg = GlobalContent.getConfig(arg);
-		}
-		if (arg == null) {
-			LogUtil.error(testCase, "第" + nextNode.SeqNo + "步，案例参数错误");
-			return;
-		}
+
 		if (preResponse.actionCode == AndroidActionCommandType.SCREENSHOT) {
 			JSONObject json = new JSONObject(preResponse.body);
 			String imageData = json.optString("ImageData", "");
@@ -55,6 +49,7 @@ public class TestCaseNode {
 		}else if(preResponse.actionCode == AndroidActionCommandType.DEVICEINFO){
 			JSONObject json = new JSONObject(preResponse.body);
 			testCase.deviceName = json.optString("NAME");
+			testCase.deviceOS = json.optString("OS");
 			File fileDir = new File(testCase.outPath + File.separatorChar + testCase.deviceName);
 			fileDir.mkdirs();
 			File devicInfo = new File(testCase.outPath + File.separatorChar + testCase.deviceName + File.separatorChar + "deviceInfo.txt");
@@ -69,6 +64,14 @@ public class TestCaseNode {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
+		}
+
+		if (arg.startsWith("$")) {
+			arg = GlobalContent.getConfig(arg, testCase.deviceOS);
+		}
+		if (arg == null) {
+			LogUtil.error(testCase, "第" + nextNode.SeqNo + "步，案例参数错误");
+			return;
 		}
 		nextNode.actionCode = action;
 		nextNode.result = 0;
@@ -108,7 +111,11 @@ public class TestCaseNode {
 			if(testCase.currentStep.name.equals("waitProcess")){
 				paramObject.put("timeout", 3);
 			} else {
-				paramObject.put("timeout", 10);
+				if (testCase.deviceOS.equals("Android")) {
+					paramObject.put("timeout", 15);
+				} else {
+					paramObject.put("timeout", 10);
+				}
 			}
 			jsonObject.put("params", paramObject.toString());
 			jsonObject.put("action", "find");
@@ -182,10 +189,20 @@ public class TestCaseNode {
 	public void assetSuccess() {
 		if (args != null) {
 			String target = args[1].trim().replace("goto:", "");
-			testCase.caseStepArray.add(testCase.testSteps.get(target));
+			testCase.caseStepArray.add(testCase.getStep(target));
 			if (target.equals("waitProcess")) {
 				testCase.caseStepArray.add(testCase.currentStep);
 			}
 		}
+	}
+
+	public TestCaseNode cloneNode(TestCase cloneCase) {
+		TestCaseNode cloneNode = new TestCaseNode(cloneCase);
+		cloneNode.actionStr = actionStr;
+		cloneNode.action = action;
+		cloneNode.arg = arg;
+		cloneNode.args = args;
+		cloneNode.index = index;
+		return cloneNode;
 	}
 }

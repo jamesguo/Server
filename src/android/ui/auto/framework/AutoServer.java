@@ -3,7 +3,6 @@ package android.ui.auto.framework;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.InputStream;
-import java.net.SocketException;
 import java.util.ArrayList;
 import java.util.Properties;
 
@@ -12,27 +11,29 @@ public class AutoServer {
 	public static ArrayList<TestCase> testCases = new ArrayList<TestCase>();
 	public static ArrayList<TestCase> runningTest = new ArrayList<TestCase>();
 
+	public AutoServerSocket server;
+
 	public static void main(String[] args) {
 		loadAllTestCase();
-		AutoServerSocket server;
+		int port = 6100;
 		try {
-			int port = 6100;
-			try {
-				port = Integer.valueOf(TestServerConfig.getConfig("ServerPort"));
-			} catch (Exception e) {
-				// TODO: handle exception
-			}
-			server = new AutoServerSocket(port);
-			server.startListener();
-		} catch (SocketException e) {
-			// TODO Auto-generated catch block
+			port = Integer.valueOf(TestServerConfig.getConfig("ServerPort"));
+		} catch (Exception e) {
+			// TODO: handle exception
+		}
+		final int realPort = port;
+		AutoServer autoServer = new AutoServer();
+		try {
+			autoServer.server = new AutoServerSocket(realPort);
+			autoServer.server.startListener();
+		} catch (Exception e) {
 			e.printStackTrace();
 		}
 	}
 
 	public static synchronized TestCase getReadyTestCase() {
-		if(testCases.size()>0){
-			TestCase testCase = testCases.get(1);
+		if (testCases.size() > 0) {
+			TestCase testCase = testCases.get(0).cloneCase();
 			// TestCase testCase = testCases.remove(0);
 			// runningTest.add(testCase);
 
@@ -40,6 +41,7 @@ public class AutoServer {
 		}
 		return null;
 	}
+
 	public static void loadAllTestCase() {
 		String testCasePath = TestServerConfig.getConfig("TestCasesPath");
 		if (testCasePath != null) {
@@ -47,12 +49,22 @@ public class AutoServer {
 			if (fileDir.exists()) {
 				ArrayList<File> arrayList = getListFiles(fileDir);
 				for (File file : arrayList) {
-					if (getFileNameNoEx(file.getName()).equals("全局变量")) {
-						if (GlobalContent.properties == null) {
-							GlobalContent.properties = new Properties();
+					if (getFileNameNoEx(file.getName()).equals("全局变量_Android")) {
+						if (GlobalContent.properties_android == null) {
+							GlobalContent.properties_android = new Properties();
 							try {
 								InputStream inputStream = new FileInputStream(file);
-								GlobalContent.properties.load(inputStream);
+								GlobalContent.properties_android.load(inputStream);
+							} catch (Exception e) {
+								e.printStackTrace();
+							}
+						}
+					} else if (getFileNameNoEx(file.getName()).equals("全局变量_IOS")) {
+						if (GlobalContent.properties_ios == null) {
+							GlobalContent.properties_ios = new Properties();
+							try {
+								InputStream inputStream = new FileInputStream(file);
+								GlobalContent.properties_ios.load(inputStream);
 							} catch (Exception e) {
 								e.printStackTrace();
 							}

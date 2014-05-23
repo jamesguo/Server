@@ -16,6 +16,7 @@ public class TestCase {
 	public String name;
 	public String outPath;
 	public String deviceName = "";
+	public String deviceOS = "";
 	public Properties properties;
 	public LinkedBlockingQueue<TestCaseStep> caseStepArray = new LinkedBlockingQueue<TestCaseStep>();
 	public HashMap<String, TestCaseStep> testSteps = new HashMap<String, TestCaseStep>();
@@ -28,7 +29,7 @@ public class TestCase {
 	}
 
 	public synchronized void startCase() {
-		TestCaseStep caseStep = testSteps.get("step1");
+		TestCaseStep caseStep = getStep("step1");
 		if (caseStep != null) {
 			caseStepArray.add(caseStep);
 		}
@@ -166,7 +167,7 @@ public class TestCase {
 					if (lastCaseStep.name.equals("success") || lastCaseStep.name.equals("error")) {
 						LogUtil.error(this, "Test Case going to finish");
 					} else {
-						currentStep = testSteps.get("error");
+						currentStep = getStep("error");
 					}
 				} else {
 					if (lastCaseStep.name.equals("waitProcess")) {
@@ -203,4 +204,34 @@ public class TestCase {
 		}
 	}
 
+	public TestCaseStep getStep(String stepName) {
+		// TODO Auto-generated method stub
+		TestCaseStep caseStep = testSteps.get(stepName);
+		if (caseStep == null) {
+			caseStep = testSteps.get(stepName + "_" + deviceOS);
+		}
+		return caseStep;
+	}
+
+	public TestCase cloneCase() {
+		TestCase cloneCase = new TestCase(name);
+		cloneCase.outPath = outPath;
+		cloneCase.deviceName = deviceName;
+		cloneCase.deviceOS = deviceOS;
+		cloneCase.properties = properties;
+		cloneCase.caseStepArray = new LinkedBlockingQueue<TestCaseStep>();
+		cloneCase.testSteps = new HashMap<String, TestCaseStep>();
+		Set<String> keys = testSteps.keySet();
+		for (String key : keys) {
+			TestCaseStep caseStep = testSteps.get(key);
+			TestCaseStep cloneStep = caseStep.cloneStep(cloneCase);
+			cloneCase.testSteps.put(key, cloneStep);
+		}
+		if (currentStep != null) {
+			cloneCase.currentStep = currentStep.cloneStep(cloneCase);
+		} else {
+			cloneCase.currentStep = null;
+		}
+		return cloneCase;
+	}
 }

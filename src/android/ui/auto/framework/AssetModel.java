@@ -33,7 +33,7 @@ public class AssetModel {
 	}
 
 	public void goToFail() {
-		testCase.caseStepArray.add(testCase.testSteps.get(errorStep));
+		testCase.caseStepArray.add(testCase.getStep(errorStep));
 		currentOffset = -1;
 	}
 
@@ -57,5 +57,17 @@ public class AssetModel {
 	public void goToSuccess() {
 		getCurrent().assetSuccess();
 		currentOffset = -1;
+	}
+
+	public AssetModel cloneAsset(TestCase cloneCase) {
+		AssetModel assetModel = new AssetModel(cloneCase, "");
+		assetModel.actions = actions;
+		assetModel.caseNodes = new ArrayList<TestCaseNode>();
+		for (TestCaseNode caseNode : caseNodes) {
+			assetModel.caseNodes.add(caseNode.cloneNode(cloneCase));
+		}
+		assetModel.errorStep = errorStep;
+
+		return assetModel;
 	}
 }

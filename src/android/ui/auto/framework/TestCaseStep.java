@@ -156,4 +156,28 @@ public class TestCaseStep {
 		}
 		return nextNode;
 	}
+
+	public TestCaseStep cloneStep(TestCase cloneCase) {
+		// TODO Auto-generated method stub
+		TestCaseStep cloneStep = new TestCaseStep(cloneCase);
+		cloneStep.name = name;
+		if (assetModel != null) {
+			cloneStep.assetModel = assetModel.cloneAsset(cloneCase);
+		} else {
+			cloneStep.assetModel = null;
+		}
+		if (errorModel != null) {
+			cloneStep.errorModel = errorModel.cloneError(cloneCase);
+		} else {
+			cloneStep.errorModel = null;
+		}
+		cloneStep.excuteTime = excuteTime;
+		cloneStep.limitTime = limitTime;
+		cloneStep.currentAction = currentAction;
+		cloneStep.actions = new ArrayList<TestCaseNode>();
+		for (TestCaseNode caseNode : actions) {
+			cloneStep.actions.add(caseNode.cloneNode(cloneCase));
+		}
+		return cloneStep;
+	}
 }
