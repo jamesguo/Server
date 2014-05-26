@@ -1,6 +1,7 @@
 package android.ui.auto.framework;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -85,7 +86,7 @@ public class AssetModel extends TestCaseNode {
 
 	public TestCaseNode asset(String body) {
 		JSONObject jsonObject = new JSONObject(body);
-		if(jsonObject!=null){
+		if (jsonObject != null) {
 			JSONArray jsonArray = jsonObject.optJSONArray("windows");
 			if (jsonArray != null) {
 				for (TestCaseNode caseNode : caseNodes) {
@@ -115,7 +116,46 @@ public class AssetModel extends TestCaseNode {
 	}
 
 	public boolean isContainValue(JSONArray jsonArray, TestCaseNode caseNode) {
+		int count = jsonArray.length();
+		for (int index = 0; index < count; index++) {
+			JSONObject jsonObject = jsonArray.getJSONObject(index);
+			String classAllInfo = jsonObject.optString("class", "");
+			String className = classAllInfo.substring(classAllInfo.indexOf(":") + 1);
+			if (caseNode.actionStr.equals("seeView")) {
+				if (className.equals(caseNode.arg)) {
+					return true;
+				}
+			} else {
+				String otherInfo = classAllInfo.substring(0, classAllInfo.indexOf(":"));
+				if (otherInfo.length() > 0) {
+					String[] infos = otherInfo.split("|");
+					ArrayList<String> arrayList = (ArrayList<String>) Arrays.asList(infos);
+					if (arrayList.contains(caseNode.arg)) {
+						return true;
+					} else {
+						JSONArray viewDescriptionArray = jsonObject.optJSONArray("props");
+						if (viewDescriptionArray != null && viewDescriptionArray.length() > 0) {
+							int size = viewDescriptionArray.length();
+							for (int position = 0; position < size; position++) {
+								JSONObject object = viewDescriptionArray.getJSONObject(position);
+								if (object != null) {
+									if (object.opt("value") != null && caseNode.arg.equals("" + object.opt("value"))) {
+										return true;
+									}
+								}
+							}
+						}
+					}
+				}
+			}
 
+			JSONArray childViews = jsonObject.optJSONArray("views");
+			if (childViews != null) {
+				if (isContainValue(childViews, caseNode)) {
+					return true;
+				}
+			}
+		}
 		return false;
 	}
 }
