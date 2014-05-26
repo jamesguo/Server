@@ -21,6 +21,7 @@ public class TestCase {
 	public LinkedBlockingQueue<TestCaseStep> caseStepArray = new LinkedBlockingQueue<TestCaseStep>();
 	public HashMap<String, TestCaseStep> testSteps = new HashMap<String, TestCaseStep>();
 	public TestCaseStep currentStep;
+
 	public TestCase(String name) {
 		this.name = name;
 		outPath = TestServerConfig.getConfig("ResultOutPath") + File.separatorChar + name;
@@ -194,12 +195,13 @@ public class TestCase {
 		}
 		caseStepArray.clear();
 		deviceName = "";
+		deviceOS = "";
 		currentStep = null;
 		for (TestCaseStep caseStep : testSteps.values()) {
 			caseStep.excuteTime = 0;
 			caseStep.currentAction = -1;
 			if (caseStep.assetModel != null) {
-				caseStep.assetModel.currentOffset = -1;
+				caseStep.assetModel.startTime = 0;
 			}
 		}
 	}

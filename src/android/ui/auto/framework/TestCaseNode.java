@@ -179,6 +179,8 @@ public class TestCaseNode {
 				// LogUtil.error("第" + nextNode.SeqNo + "步，案例错误，press前需先查找元素");
 			}
 			break;
+		case AndroidActionCommandType.VIEWDUMP:
+			break;
 		default:
 			break;
 		}

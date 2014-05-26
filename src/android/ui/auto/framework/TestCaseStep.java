@@ -57,17 +57,16 @@ public class TestCaseStep {
 						node = assetModel.getNext();
 						if (node == null) {
 							excuteTime = excuteTime + 1;
-							LogUtil.debug(testCase, "[" + testCase.name + "]" + "第" + excuteTime + "次执行" + "[" + name + "]第" + (assetModel.currentOffset) + "条件验证失败");
+							LogUtil.debug(testCase, "[" + testCase.name + "]" + "第" + excuteTime + "次执行" + "[" + name + "]全部条件验证失败");
+							// LogUtil.debug(testCase, "[" + testCase.name + "]"
+							// + "第" + excuteTime + "次执行" + "[" + name + "]第" +
+							// (assetModel.currentOffset) + "条件验证失败");
 							assetModel.goToFail();
 							currentAction = -1;
 							return null;
 						}
 					} else {
 						excuteTime = excuteTime + 1;
-						if (name.equals("waitProcess")) {
-							currentAction = -1;
-							return null;
-						}
 						LogUtil.debug(testCase, "[" + testCase.name + "]" + "第" + excuteTime + "次执行" + "[" + name + "]" + "缺少 验证指令");
 						currentAction = -1;
 						return null;
@@ -97,41 +96,23 @@ public class TestCaseStep {
 				}
 			}
 		} else {
+			TestCaseNode node;
 			if (cmd.result == 0) {
-				String target = assetModel.getCurrent().args[1].trim().replace("goto:", "");
-				if (target.equals("waitProcess")) {
-					assetModel.getCurrent().assetSuccess();
-					LogUtil.debug(testCase, "[" + testCase.name + "]" + "第" + (excuteTime + 1) + "次执行" + "[" + name + "] waitProcess 验证成功");
-					LogUtil.error(testCase, "Step 队列中剩余" + testCase.caseStepArray.size() + "个操作，下一个操作为" + (testCase.caseStepArray.size() > 0 ? ("" + testCase.caseStepArray.peek().name) : ""));
+				node = assetModel.asset(cmd.body);
+			} else {
+				node = assetModel.assetEmpty();
+			}
+			if (node == null) {
+				if (testCase.caseStepArray.size() > 1) {
+					// 进入waitProcess
+					LogUtil.debug(testCase, "[" + testCase.name + "]" + "进入 waitProcess");
 				} else {
-					assetModel.getCurrent().assetSuccess();
+					// 进入其他step
 					excuteTime = excuteTime + 1;
-					LogUtil.debug(testCase, "[" + testCase.name + "]" + "第" + excuteTime + "次执行" + "[" + name + "]第" + (assetModel.currentOffset + 1) + "验证成功");
 					currentAction = -1;
-					assetModel.currentOffset = -1;
 				}
 				return null;
 			} else {
-				TestCaseNode node;
-				node = assetModel.getNext();
-				if (node == null) {
-					excuteTime = excuteTime + 1;
-					LogUtil.debug(testCase, "[" + testCase.name + "]" + "第" + excuteTime + "次执行" + "[" + name + "]第" + (assetModel.currentOffset) + "条件验证失败");
-					assetModel.goToFail();
-					currentAction = -1;
-					return null;
-				}
-				if (node.action == AndroidActionCommandType.SEE && node.arg.isEmpty()) {
-					String target = node.args[1].trim().replace("goto:", "");
-					if (target.equals("continue")) {
-						return null;
-					} else {
-						assetModel.goToSuccess();
-						currentAction = -1;
-						return null;
-					}
-				}
-
 				node.creatActionCommand(nextNode, cmd, new TestCaseNode(testCase));
 				if (node.action == AndroidActionCommandType.WAIT) {
 					if (node.arg.isEmpty()) {
@@ -153,6 +134,65 @@ public class TestCaseStep {
 					}
 				}
 			}
+			return nextNode;
+//			
+//			
+//			if (cmd.result == 0) {
+//				String target = assetModel.getCurrent().args[1].trim().replace("goto:", "");
+//				if (target.equals("waitProcess")) {
+//					assetModel.getCurrent().assetSuccess();
+//					LogUtil.debug(testCase, "[" + testCase.name + "]" + "第" + (excuteTime + 1) + "次执行" + "[" + name + "] waitProcess 验证成功");
+//					LogUtil.error(testCase, "Step 队列中剩余" + testCase.caseStepArray.size() + "个操作，下一个操作为" + (testCase.caseStepArray.size() > 0 ? ("" + testCase.caseStepArray.peek().name) : ""));
+//				} else {
+//					assetModel.getCurrent().assetSuccess();
+//					excuteTime = excuteTime + 1;
+//					LogUtil.debug(testCase, "[" + testCase.name + "]" + "第" + excuteTime + "次执行" + "[" + name + "]第" + (assetModel.currentOffset + 1) + "验证成功");
+//					currentAction = -1;
+//					assetModel.currentOffset = -1;
+//				}
+//				return null;
+//			} else {
+//				TestCaseNode node;
+//				node = assetModel.getNext();
+//				if (node == null) {
+//					excuteTime = excuteTime + 1;
+//					LogUtil.debug(testCase, "[" + testCase.name + "]" + "第" + excuteTime + "次执行" + "[" + name + "]第" + (assetModel.currentOffset) + "条件验证失败");
+//					assetModel.goToFail();
+//					currentAction = -1;
+//					return null;
+//				}
+//				if (node.action == AndroidActionCommandType.SEE && node.arg.isEmpty()) {
+//					String target = node.args[1].trim().replace("goto:", "");
+//					if (target.equals("continue")) {
+//						return null;
+//					} else {
+//						assetModel.goToSuccess();
+//						currentAction = -1;
+//						return null;
+//					}
+//				}
+//
+//				node.creatActionCommand(nextNode, cmd, new TestCaseNode(testCase));
+//				if (node.action == AndroidActionCommandType.WAIT) {
+//					if (node.arg.isEmpty()) {
+//						node.arg = "5";
+//					}
+//					int timeout = 0;
+//					try {
+//						timeout = Integer.valueOf(node.arg.trim());
+//					} catch (Exception e) {
+//						// TODO: handle exception
+//					}
+//					if (timeout == 0) {
+//						timeout = 5;
+//					}
+//					try {
+//						Thread.sleep(timeout * 1000);
+//					} catch (Exception e) {
+//						// TODO: handle exception
+//					}
+//				}
+//			}
 		}
 		return nextNode;
 	}
