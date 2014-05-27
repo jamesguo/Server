@@ -20,7 +20,8 @@ public class AutoServerSocket {
 		while (!AutoServer.allCaseFinished) {
 			try {
 				Socket client = serverSocket.accept();
-				client.setSoTimeout(0);
+				//60秒读超时
+				client.setSoTimeout(60*1000);
 				System.out.println("创建新的链路");
 				final TestCase testCase = AutoServer.getReadyTestCase();
 				final Socket oneClient = client;

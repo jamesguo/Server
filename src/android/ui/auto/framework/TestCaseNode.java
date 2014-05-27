@@ -20,6 +20,7 @@ public class TestCaseNode {
 	public String arg = "";
 	public String[] args;
 	public int index = 0;
+	public String strValue ="";
 
 	public TestCaseNode(TestCase testCase) {
 		this.testCase = testCase;
@@ -29,23 +30,33 @@ public class TestCaseNode {
 
 		if (preResponse.actionCode == AndroidActionCommandType.SCREENSHOT) {
 			JSONObject json = new JSONObject(preResponse.body);
-			String imageData = json.optString("ImageData", "");
-			byte[] imageBytes = TypeConvertUtil.hexStringToBytes(imageData);
-			File image = new File(testCase.outPath + File.separatorChar + testCase.deviceName + File.separatorChar + TypeConvertUtil.getFormatImageTime() + "_" + lastCaseNode.arg);
-			if (image.exists()) {
-				image.delete();
-			}
-			try {
-				FileOutputStream fos = new FileOutputStream(image);
-				fos.write(imageBytes);
-				fos.close();
-			} catch (UnsupportedEncodingException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			} catch (IOException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
+			final String imageData = json.optString("ImageData", "");
+			final String arg = lastCaseNode.arg;
+			new Thread(new Runnable() {
+				
+				@Override
+				public void run() {
+					if(!imageData.equals("")){
+						byte[] imageBytes = TypeConvertUtil.hexStringToBytes(imageData);
+						File image = new File(testCase.outPath + File.separatorChar + testCase.deviceName + File.separatorChar + testCase.identify+ File.separatorChar + TypeConvertUtil.getFormatImageTime() + "_" + arg);
+						if (image.exists()) {
+							image.delete();
+						}
+						try {
+							FileOutputStream fos = new FileOutputStream(image);
+							fos.write(imageBytes);
+							fos.close();
+						} catch (UnsupportedEncodingException e) {
+							// TODO Auto-generated catch block
+							e.printStackTrace();
+						} catch (IOException e) {
+							// TODO Auto-generated catch block
+							e.printStackTrace();
+						}
+					}
+				}
+			}).start();
+			
 		}else if(preResponse.actionCode == AndroidActionCommandType.DEVICEINFO){
 			JSONObject json = new JSONObject(preResponse.body);
 			testCase.deviceName = json.optString("NAME");
@@ -112,9 +123,9 @@ public class TestCaseNode {
 				paramObject.put("timeout", 3);
 			} else {
 				if (testCase.deviceOS.equals("Android")) {
-					paramObject.put("timeout", 15);
+					paramObject.put("timeout", 6);
 				} else {
-					paramObject.put("timeout", 10);
+					paramObject.put("timeout", 6);
 				}
 			}
 			jsonObject.put("params", paramObject.toString());
@@ -205,6 +216,7 @@ public class TestCaseNode {
 		cloneNode.arg = arg;
 		cloneNode.args = args;
 		cloneNode.index = index;
+		cloneNode.strValue = strValue;
 		return cloneNode;
 	}
 }

@@ -32,13 +32,13 @@ public class LogUtil {
 	}
 
 	public static void writeToFile(TestCase testCase, String string) {
-		if (testCase != null) {
-			File fileDir = new File(testCase.outPath + File.separatorChar + testCase.deviceName);
+		if (testCase != null&&!testCase.deviceName.equals("")) {
+			File fileDir = new File(testCase.outPath + File.separatorChar + testCase.deviceName + File.separatorChar + testCase.identify);
 			fileDir.mkdirs();
-			File logInfo = new File(testCase.outPath + File.separatorChar + testCase.deviceName + File.separatorChar + "logInfo.txt");
+			File logInfo = new File(testCase.outPath + File.separatorChar + testCase.deviceName + File.separatorChar + testCase.identify + File.separatorChar+ "logInfo.txt");
 			BufferedWriter out = null;
 			try {
-				out = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(logInfo, true)));
+				out = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(logInfo, true),"UTF-8"));
 				out.write(string + "\n");
 			} catch (Exception e) {
 				e.printStackTrace();

@@ -45,6 +45,7 @@ public class TestCaseStep {
 				currentAction = -1;
 				return null;
 			} else {
+				
 				TestCaseNode lastNode = new TestCaseNode(testCase);
 				if (currentAction == 0) {
 					lastNode = new TestCaseNode(testCase);
@@ -57,7 +58,6 @@ public class TestCaseStep {
 						node = assetModel.getNext();
 						if (node == null) {
 							excuteTime = excuteTime + 1;
-							LogUtil.debug(testCase, "[" + testCase.name + "]" + "第" + excuteTime + "次执行" + "[" + name + "]全部条件验证失败");
 							// LogUtil.debug(testCase, "[" + testCase.name + "]"
 							// + "第" + excuteTime + "次执行" + "[" + name + "]第" +
 							// (assetModel.currentOffset) + "条件验证失败");
@@ -67,6 +67,10 @@ public class TestCaseStep {
 						}
 					} else {
 						excuteTime = excuteTime + 1;
+						if (name.equals("waitProcess")) {
+							currentAction = -1;
+							return null;
+						}
 						LogUtil.debug(testCase, "[" + testCase.name + "]" + "第" + excuteTime + "次执行" + "[" + name + "]" + "缺少 验证指令");
 						currentAction = -1;
 						return null;
@@ -74,6 +78,7 @@ public class TestCaseStep {
 				} else {
 					node = actions.get(currentAction);
 				}
+				LogUtil.debug(testCase, "[" + testCase.name + "]执行" + "[" + node.strValue + "]");
 				node.creatActionCommand(nextNode, cmd, lastNode);
 				if (node.action == AndroidActionCommandType.WAIT) {
 					if (node.arg.isEmpty()) {
@@ -96,10 +101,17 @@ public class TestCaseStep {
 				}
 			}
 		} else {
+			
+			
 			TestCaseNode node;
 			if (cmd.result == 0) {
 				node = assetModel.asset(cmd.body);
 			} else {
+				// 失败
+				if (name.equals("waitProcess")) {
+					currentAction = -1;
+					return null;
+				}
 				node = assetModel.assetEmpty();
 			}
 			if (node == null) {
@@ -113,6 +125,7 @@ public class TestCaseStep {
 				}
 				return null;
 			} else {
+				LogUtil.debug(testCase, "[" + testCase.name + "]执行" + "[" + node.strValue + "]");
 				node.creatActionCommand(nextNode, cmd, new TestCaseNode(testCase));
 				if (node.action == AndroidActionCommandType.WAIT) {
 					if (node.arg.isEmpty()) {

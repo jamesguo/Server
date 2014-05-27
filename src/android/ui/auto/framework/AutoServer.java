@@ -10,7 +10,7 @@ public class AutoServer {
 	public static boolean allCaseFinished = false;
 	public static ArrayList<TestCase> testCases = new ArrayList<TestCase>();
 	public static ArrayList<TestCase> runningTest = new ArrayList<TestCase>();
-	public static long TIMEOUT = 15;
+	public static long TIMEOUT = 6;
 
 	public AutoServerSocket server;
 

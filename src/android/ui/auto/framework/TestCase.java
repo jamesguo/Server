@@ -11,8 +11,10 @@ import java.util.concurrent.TimeUnit;
 import android.ui.auto.framework.command.AndroidActionCommand;
 import android.ui.auto.framework.command.AndroidActionCommandType;
 import android.ui.auto.framework.log.LogUtil;
+import android.ui.auto.framework.util.TypeConvertUtil;
 
 public class TestCase {
+	public String identify;
 	public String name;
 	public String outPath;
 	public String deviceName = "";
@@ -74,6 +76,7 @@ public class TestCase {
 									String actionName = temp.substring(0, temp.indexOf("("));
 									String args = temp.substring(temp.indexOf("(") + 1, temp.indexOf(")"));
 									caseNode.actionStr = actionName;
+									caseNode.strValue = temp;
 									caseNode.action = AndroidActionCommandType.getActionFromStr(actionName);
 									caseNode.arg = args;
 									caseStep.actions.add(caseNode);
@@ -106,6 +109,7 @@ public class TestCase {
 							String args = temp.substring(temp.indexOf("(") + 1, temp.indexOf(")"));
 							caseNode.action = AndroidActionCommandType.getActionFromStr(actionName);
 							caseNode.actionStr = actionName;
+							caseNode.strValue = temp;
 							caseNode.arg = args;
 							caseStep.actions.add(caseNode);
 						}
@@ -122,6 +126,7 @@ public class TestCase {
 							String args = temp.substring(temp.indexOf("(") + 1, temp.indexOf(")"));
 							caseNode.action = AndroidActionCommandType.getActionFromStr(actionName);
 							caseNode.actionStr = actionName;
+							caseNode.strValue = temp;
 							caseNode.arg = args;
 							caseStep.actions.add(caseNode);
 						}
@@ -139,6 +144,7 @@ public class TestCase {
 							String args = temp.substring(temp.indexOf("(") + 1, temp.indexOf(")"));
 							caseNode.action = AndroidActionCommandType.getActionFromStr(actionName);
 							caseNode.actionStr = actionName;
+							caseNode.strValue = temp;
 							caseNode.arg = args;
 							caseStep.actions.add(caseNode);
 						}
@@ -160,7 +166,7 @@ public class TestCase {
 			try {
 				TestCaseStep lastCaseStep = currentStep;
 				currentStep = caseStepArray.poll(3, TimeUnit.SECONDS);
-				while (currentStep.limitTime <= currentStep.excuteTime) {
+				while (currentStep!=null&&currentStep.limitTime <= currentStep.excuteTime) {
 					currentStep.assetModel.goToFail();
 					currentStep = caseStepArray.poll(3, TimeUnit.SECONDS);
 				}
@@ -174,6 +180,10 @@ public class TestCase {
 					if (lastCaseStep.name.equals("waitProcess")) {
 						AndroidActionCommand androidActionCommand = new AndroidActionCommand();
 						androidActionCommand.result = 1;
+						if(currentStep.assetModel!=null){
+							//转圈结束后，超时时间由原有6s缩短为3s
+							currentStep.assetModel.startTime=System.currentTimeMillis()-3*1000;
+						}
 						actionCommand = currentStep.runNextNode(androidActionCommand);
 					} else {
 						actionCommand = currentStep.runNextNode(new AndroidActionCommand());
@@ -217,6 +227,7 @@ public class TestCase {
 
 	public TestCase cloneCase() {
 		TestCase cloneCase = new TestCase(name);
+		cloneCase.identify = TypeConvertUtil.getFormatImageTime();
 		cloneCase.outPath = outPath;
 		cloneCase.deviceName = deviceName;
 		cloneCase.deviceOS = deviceOS;
