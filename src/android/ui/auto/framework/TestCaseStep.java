@@ -1,165 +1,165 @@
 package android.ui.auto.framework;
 
-import java.util.ArrayList;
-
 import android.ui.auto.framework.command.AndroidActionCommand;
 import android.ui.auto.framework.command.AndroidActionCommandType;
 import android.ui.auto.framework.log.LogUtil;
 
+import java.util.ArrayList;
+
 public class TestCaseStep {
-	public ArrayList<TestCaseNode> actions = new ArrayList<TestCaseNode>();
-	public String name = "";
-	public AssetModel assetModel;
-	public ErrorModel errorModel;
-	public int excuteTime = 0;
-	public int limitTime = 20;
-	public int currentAction = -1;
-	public TestCase testCase;
+    public ArrayList<TestCaseNode> actions = new ArrayList<TestCaseNode>();
+    public String name = "";
+    public AssetModel assetModel;
+    public ErrorModel errorModel;
+    public int excuteTime = 0;
+    public int limitTime = 20;
+    public int currentAction = -1;
+    public TestCase testCase;
 
-	public TestCaseStep(TestCase testCase) {
-		this.testCase = testCase;
-	}
+    public TestCaseStep(TestCase testCase) {
+        this.testCase = testCase;
+    }
 
-	public AndroidActionCommand runNextNode(AndroidActionCommand cmd) {
-		if (currentAction == -1) {
-			LogUtil.debug(testCase, "[" + testCase.name + "]" + "µÚ" + (excuteTime + 1) + "´ÎÖ´ÐÐ" + "[" + name + "]");
-		}
-		AndroidActionCommand nextNode = new AndroidActionCommand();
-		nextNode.SeqNo = cmd.SeqNo + 1;
-		currentAction = currentAction + 1;
+    public AndroidActionCommand runNextNode(AndroidActionCommand cmd) {
+        if (currentAction == -1) {
+            LogUtil.debug(testCase, "[" + testCase.name + "]" + "ï¿½ï¿½" + (excuteTime + 1) + "ï¿½ï¿½Ö´ï¿½ï¿½" + "[" + name + "]");
+        }
+        AndroidActionCommand nextNode = new AndroidActionCommand();
+        nextNode.SeqNo = cmd.SeqNo + 1;
+        currentAction = currentAction + 1;
 
-		if (currentAction <= actions.size()) {
-			// Õý³£Ö´ÐÐµÄ½á¹û
-			if (cmd.result == 1) {
-				// Ê§°Ü
-				if (name.equals("waitProcess")) {
-					currentAction = -1;
-					return null;
-				}
-				if (errorModel == null) {
-					errorModel = new ErrorModel(testCase, "goto:error");
-				}
-				errorModel.goError();
-				excuteTime = excuteTime + 1;
-				LogUtil.debug(testCase, "[" + testCase.name + "]" + "µÚ" + excuteTime + "´ÎÖ´ÐÐ" + "[" + name + "]" + "µÄµÚ" + (currentAction) + "²Ù×÷Ê§°Ü:" + cmd.body);
-				currentAction = -1;
-				return null;
-			} else {
-				
-				TestCaseNode lastNode = new TestCaseNode(testCase);
-				if (currentAction == 0) {
-					lastNode = new TestCaseNode(testCase);
-				} else if (currentAction <= actions.size()) {
-					lastNode = actions.get(currentAction - 1);
-				}
-				TestCaseNode node;
-				if (currentAction == actions.size()) {
-					if (assetModel != null) {
-						node = assetModel.getNext();
-						if (node == null) {
-							excuteTime = excuteTime + 1;
-							// LogUtil.debug(testCase, "[" + testCase.name + "]"
-							// + "µÚ" + excuteTime + "´ÎÖ´ÐÐ" + "[" + name + "]µÚ" +
-							// (assetModel.currentOffset) + "Ìõ¼þÑéÖ¤Ê§°Ü");
-							assetModel.goToFail();
-							currentAction = -1;
-							return null;
-						}
-					} else {
-						excuteTime = excuteTime + 1;
-						if (name.equals("waitProcess")) {
-							currentAction = -1;
-							return null;
-						}
-						LogUtil.debug(testCase, "[" + testCase.name + "]" + "µÚ" + excuteTime + "´ÎÖ´ÐÐ" + "[" + name + "]" + "È±ÉÙ ÑéÖ¤Ö¸Áî");
-						currentAction = -1;
-						return null;
-					}
-				} else {
-					node = actions.get(currentAction);
-				}
-				LogUtil.debug(testCase, "[" + testCase.name + "]Ö´ÐÐ" + "[" + node.strValue + "]");
-				node.creatActionCommand(nextNode, cmd, lastNode);
-				if (node.action == AndroidActionCommandType.WAIT) {
-					if (node.arg.isEmpty()) {
-						node.arg = "5";
-					}
-					int timeout = 0;
-					try {
-						timeout = Integer.valueOf(node.arg.trim());
-					} catch (Exception e) {
-						// TODO: handle exception
-					}
-					if (timeout == 0) {
-						timeout = 5;
-					}
-					try {
-						Thread.sleep(timeout * 1000);
-					} catch (Exception e) {
-						// TODO: handle exception
-					}
-				}
-			}
-		} else {
-			
-			
-			TestCaseNode node;
-			if (cmd.result == 0) {
-				node = assetModel.asset(cmd.body);
-			} else {
-				// Ê§°Ü
-				if (name.equals("waitProcess")) {
-					currentAction = -1;
-					return null;
-				}
-				node = assetModel.assetEmpty();
-			}
-			if (node == null) {
-				if (testCase.caseStepArray.size() > 1) {
-					// ½øÈëwaitProcess
-					LogUtil.debug(testCase, "[" + testCase.name + "]" + "½øÈë waitProcess");
-				} else {
-					// ½øÈëÆäËûstep
-					excuteTime = excuteTime + 1;
-					currentAction = -1;
-				}
-				return null;
-			} else {
-				LogUtil.debug(testCase, "[" + testCase.name + "]Ö´ÐÐ" + "[" + node.strValue + "]");
-				node.creatActionCommand(nextNode, cmd, new TestCaseNode(testCase));
-				if (node.action == AndroidActionCommandType.WAIT) {
-					if (node.arg.isEmpty()) {
-						node.arg = "5";
-					}
-					int timeout = 0;
-					try {
-						timeout = Integer.valueOf(node.arg.trim());
-					} catch (Exception e) {
-						// TODO: handle exception
-					}
-					if (timeout == 0) {
-						timeout = 5;
-					}
-					try {
-						Thread.sleep(timeout * 1000);
-					} catch (Exception e) {
-						// TODO: handle exception
-					}
-				}
-			}
-			return nextNode;
+        if (currentAction <= actions.size()) {
+            // ï¿½ï¿½Ö´ï¿½ÐµÄ½ï¿½ï¿½
+            if (cmd.result == 1) {
+                // Ê§ï¿½ï¿½
+                if (name.equals("waitProcess")) {
+                    currentAction = -1;
+                    return null;
+                }
+                if (errorModel == null) {
+                    errorModel = new ErrorModel(testCase, "goto:error");
+                }
+                errorModel.goError();
+                excuteTime = excuteTime + 1;
+                LogUtil.debug(testCase, "[" + testCase.name + "]" + "ï¿½ï¿½" + excuteTime + "ï¿½ï¿½Ö´ï¿½ï¿½" + "[" + name + "]" + "ï¿½Äµï¿½" + (currentAction) + "ï¿½ï¿½ï¿½ï¿½Ê§ï¿½ï¿½:" + cmd.body);
+                currentAction = -1;
+                return null;
+            } else {
+
+                TestCaseNode lastNode = new TestCaseNode(testCase);
+                if (currentAction == 0) {
+                    lastNode = new TestCaseNode(testCase);
+                } else if (currentAction <= actions.size()) {
+                    lastNode = actions.get(currentAction - 1);
+                }
+                TestCaseNode node;
+                if (currentAction == actions.size()) {
+                    if (assetModel != null) {
+                        node = assetModel.getNext();
+                        if (node == null) {
+                            excuteTime = excuteTime + 1;
+                            // LogUtil.debug(testCase, "[" + testCase.name + "]"
+                            // + "ï¿½ï¿½" + excuteTime + "ï¿½ï¿½Ö´ï¿½ï¿½" + "[" + name + "]ï¿½ï¿½" +
+                            // (assetModel.currentOffset) + "ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ö¤Ê§ï¿½ï¿½");
+                            assetModel.goToFail();
+                            currentAction = -1;
+                            return null;
+                        }
+                    } else {
+                        excuteTime = excuteTime + 1;
+                        if (name.equals("waitProcess")) {
+                            currentAction = -1;
+                            return null;
+                        }
+                        LogUtil.debug(testCase, "[" + testCase.name + "]" + "ï¿½ï¿½" + excuteTime + "ï¿½ï¿½Ö´ï¿½ï¿½" + "[" + name + "]" + "È±ï¿½ï¿½ ï¿½ï¿½Ö¤Ö¸ï¿½ï¿½");
+                        currentAction = -1;
+                        return null;
+                    }
+                } else {
+                    node = actions.get(currentAction);
+                }
+                LogUtil.debug(testCase, "[" + testCase.name + "]Ö´ï¿½ï¿½" + "[" + node.strValue + "]");
+                node.creatActionCommand(nextNode, cmd, lastNode);
+                if (node.action == AndroidActionCommandType.WAIT) {
+                    if (node.arg.isEmpty()) {
+                        node.arg = "5";
+                    }
+                    int timeout = 0;
+                    try {
+                        timeout = Integer.valueOf(node.arg.trim());
+                    } catch (Exception e) {
+                        // TODO: handle exception
+                    }
+                    if (timeout == 0) {
+                        timeout = 5;
+                    }
+                    try {
+                        Thread.sleep(timeout * 1000);
+                    } catch (Exception e) {
+                        // TODO: handle exception
+                    }
+                }
+            }
+        } else {
+
+
+            TestCaseNode node;
+            if (cmd.result == 0) {
+                node = assetModel.asset(cmd.body);
+            } else {
+                // Ê§ï¿½ï¿½
+                if (name.equals("waitProcess")) {
+                    currentAction = -1;
+                    return null;
+                }
+                node = assetModel.assetEmpty();
+            }
+            if (node == null) {
+                if (testCase.caseStepArray.size() > 1) {
+                    // ï¿½ï¿½ï¿½ï¿½waitProcess
+                    LogUtil.debug(testCase, "[" + testCase.name + "]" + "ï¿½ï¿½ï¿½ï¿½ waitProcess");
+                } else {
+                    // ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½step
+                    excuteTime = excuteTime + 1;
+                    currentAction = -1;
+                }
+                return null;
+            } else {
+                LogUtil.debug(testCase, "[" + testCase.name + "]Ö´ï¿½ï¿½" + "[" + node.strValue + "]");
+                node.creatActionCommand(nextNode, cmd, new TestCaseNode(testCase));
+                if (node.action == AndroidActionCommandType.WAIT) {
+                    if (node.arg.isEmpty()) {
+                        node.arg = "5";
+                    }
+                    int timeout = 0;
+                    try {
+                        timeout = Integer.valueOf(node.arg.trim());
+                    } catch (Exception e) {
+                        // TODO: handle exception
+                    }
+                    if (timeout == 0) {
+                        timeout = 5;
+                    }
+                    try {
+                        Thread.sleep(timeout * 1000);
+                    } catch (Exception e) {
+                        // TODO: handle exception
+                    }
+                }
+            }
+            return nextNode;
 //			
 //			
 //			if (cmd.result == 0) {
 //				String target = assetModel.getCurrent().args[1].trim().replace("goto:", "");
 //				if (target.equals("waitProcess")) {
 //					assetModel.getCurrent().assetSuccess();
-//					LogUtil.debug(testCase, "[" + testCase.name + "]" + "µÚ" + (excuteTime + 1) + "´ÎÖ´ÐÐ" + "[" + name + "] waitProcess ÑéÖ¤³É¹¦");
-//					LogUtil.error(testCase, "Step ¶ÓÁÐÖÐÊ£Óà" + testCase.caseStepArray.size() + "¸ö²Ù×÷£¬ÏÂÒ»¸ö²Ù×÷Îª" + (testCase.caseStepArray.size() > 0 ? ("" + testCase.caseStepArray.peek().name) : ""));
+//					LogUtil.debug(testCase, "[" + testCase.name + "]" + "ï¿½ï¿½" + (excuteTime + 1) + "ï¿½ï¿½Ö´ï¿½ï¿½" + "[" + name + "] waitProcess ï¿½ï¿½Ö¤ï¿½É¹ï¿½");
+//					LogUtil.error(testCase, "Step ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ê£ï¿½ï¿½" + testCase.caseStepArray.size() + "ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ò»ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Îª" + (testCase.caseStepArray.size() > 0 ? ("" + testCase.caseStepArray.peek().name) : ""));
 //				} else {
 //					assetModel.getCurrent().assetSuccess();
 //					excuteTime = excuteTime + 1;
-//					LogUtil.debug(testCase, "[" + testCase.name + "]" + "µÚ" + excuteTime + "´ÎÖ´ÐÐ" + "[" + name + "]µÚ" + (assetModel.currentOffset + 1) + "ÑéÖ¤³É¹¦");
+//					LogUtil.debug(testCase, "[" + testCase.name + "]" + "ï¿½ï¿½" + excuteTime + "ï¿½ï¿½Ö´ï¿½ï¿½" + "[" + name + "]ï¿½ï¿½" + (assetModel.currentOffset + 1) + "ï¿½ï¿½Ö¤ï¿½É¹ï¿½");
 //					currentAction = -1;
 //					assetModel.currentOffset = -1;
 //				}
@@ -169,7 +169,7 @@ public class TestCaseStep {
 //				node = assetModel.getNext();
 //				if (node == null) {
 //					excuteTime = excuteTime + 1;
-//					LogUtil.debug(testCase, "[" + testCase.name + "]" + "µÚ" + excuteTime + "´ÎÖ´ÐÐ" + "[" + name + "]µÚ" + (assetModel.currentOffset) + "Ìõ¼þÑéÖ¤Ê§°Ü");
+//					LogUtil.debug(testCase, "[" + testCase.name + "]" + "ï¿½ï¿½" + excuteTime + "ï¿½ï¿½Ö´ï¿½ï¿½" + "[" + name + "]ï¿½ï¿½" + (assetModel.currentOffset) + "ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ö¤Ê§ï¿½ï¿½");
 //					assetModel.goToFail();
 //					currentAction = -1;
 //					return null;
@@ -206,31 +206,31 @@ public class TestCaseStep {
 //					}
 //				}
 //			}
-		}
-		return nextNode;
-	}
+        }
+        return nextNode;
+    }
 
-	public TestCaseStep cloneStep(TestCase cloneCase) {
-		// TODO Auto-generated method stub
-		TestCaseStep cloneStep = new TestCaseStep(cloneCase);
-		cloneStep.name = name;
-		if (assetModel != null) {
-			cloneStep.assetModel = assetModel.cloneAsset(cloneCase);
-		} else {
-			cloneStep.assetModel = null;
-		}
-		if (errorModel != null) {
-			cloneStep.errorModel = errorModel.cloneError(cloneCase);
-		} else {
-			cloneStep.errorModel = null;
-		}
-		cloneStep.excuteTime = excuteTime;
-		cloneStep.limitTime = limitTime;
-		cloneStep.currentAction = currentAction;
-		cloneStep.actions = new ArrayList<TestCaseNode>();
-		for (TestCaseNode caseNode : actions) {
-			cloneStep.actions.add(caseNode.cloneNode(cloneCase));
-		}
-		return cloneStep;
-	}
+    public TestCaseStep cloneStep(TestCase cloneCase) {
+        // TODO Auto-generated method stub
+        TestCaseStep cloneStep = new TestCaseStep(cloneCase);
+        cloneStep.name = name;
+        if (assetModel != null) {
+            cloneStep.assetModel = assetModel.cloneAsset(cloneCase);
+        } else {
+            cloneStep.assetModel = null;
+        }
+        if (errorModel != null) {
+            cloneStep.errorModel = errorModel.cloneError(cloneCase);
+        } else {
+            cloneStep.errorModel = null;
+        }
+        cloneStep.excuteTime = excuteTime;
+        cloneStep.limitTime = limitTime;
+        cloneStep.currentAction = currentAction;
+        cloneStep.actions = new ArrayList<TestCaseNode>();
+        for (TestCaseNode caseNode : actions) {
+            cloneStep.actions.add(caseNode.cloneNode(cloneCase));
+        }
+        return cloneStep;
+    }
 }

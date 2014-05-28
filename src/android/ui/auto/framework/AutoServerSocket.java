@@ -6,35 +6,36 @@ import java.net.Socket;
 import java.net.SocketException;
 
 public class AutoServerSocket {
-	ServerSocket serverSocket;
-	public AutoServerSocket(final int port) throws SocketException {
-		try {
-			serverSocket = new ServerSocket(port);
-			serverSocket.setSoTimeout(0);
-		} catch (Exception e) {
-			throw new SocketException("start socket server failed on " + port);
-		}
-	}
+    ServerSocket serverSocket;
 
-	public void startListener() throws SocketException {
-		while (!AutoServer.allCaseFinished) {
-			try {
-				Socket client = serverSocket.accept();
-				//60Ãë¶Á³¬Ê±
-				client.setSoTimeout(60*1000);
-				System.out.println("´´½¨ÐÂµÄÁ´Â·");
-				final TestCase testCase = AutoServer.getReadyTestCase();
-				final Socket oneClient = client;
-				if (testCase != null) {
-					new TestCaseThread(testCase, oneClient).start();
-				}
-			} catch (IOException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-				break;
-			}
-		}
+    public AutoServerSocket(final int port) throws SocketException {
+        try {
+            serverSocket = new ServerSocket(port);
+            serverSocket.setSoTimeout(0);
+        } catch (Exception e) {
+            throw new SocketException("start socket server failed on " + port);
+        }
+    }
 
-	}
+    public void startListener() throws SocketException {
+        while (!AutoServer.allCaseFinished) {
+            try {
+                Socket client = serverSocket.accept();
+                //60ï¿½ï¿½ï¿½ï¿½ï¿½Ê±
+                client.setSoTimeout(60 * 1000);
+                System.out.println("ï¿½ï¿½ï¿½ï¿½ï¿½Âµï¿½ï¿½ï¿½Â·");
+                final TestCase testCase = AutoServer.getReadyTestCase();
+                final Socket oneClient = client;
+                if (testCase != null) {
+                    new TestCaseThread(testCase, oneClient).start();
+                }
+            } catch (IOException e) {
+                // TODO Auto-generated catch block
+                e.printStackTrace();
+                break;
+            }
+        }
+
+    }
 
 }
