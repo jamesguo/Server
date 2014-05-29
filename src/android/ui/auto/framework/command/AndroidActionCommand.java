@@ -11,9 +11,9 @@ public class AndroidActionCommand {
     public int actionCode = AndroidActionCommandType.NULL;
     public int SeqNo = 0;
     /**
-     * ��ʾҵ��ɹ�/ʧ�ܡ� 0: ҵ��ɹ���Response�ֶη���ҵ��response���ġ�
-     * <p/>
-     * 1: ҵ��ʧ�ܡ�Response�ֶη���һ�������Response���ġ�
+     * 0 为成功
+     * 1 为失败
+     *
      */
     public byte result = 0;
     public String body = "";

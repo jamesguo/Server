@@ -22,16 +22,15 @@ public class TestCaseStep {
 
     public AndroidActionCommand runNextNode(AndroidActionCommand cmd) {
         if (currentAction == -1) {
-            LogUtil.debug(testCase, "[" + testCase.name + "]" + "��" + (excuteTime + 1) + "��ִ��" + "[" + name + "]");
+            LogUtil.debug(testCase, "[" + testCase.name + "]" + "第" + (excuteTime + 1) + "次执行" + "[" + name + "]");
         }
         AndroidActionCommand nextNode = new AndroidActionCommand();
         nextNode.SeqNo = cmd.SeqNo + 1;
         currentAction = currentAction + 1;
 
         if (currentAction <= actions.size()) {
-            // ��ִ�еĽ��
             if (cmd.result == 1) {
-                // ʧ��
+                // 失败
                 if (name.equals("waitProcess")) {
                     currentAction = -1;
                     return null;
@@ -41,7 +40,7 @@ public class TestCaseStep {
                 }
                 errorModel.goError();
                 excuteTime = excuteTime + 1;
-                LogUtil.debug(testCase, "[" + testCase.name + "]" + "��" + excuteTime + "��ִ��" + "[" + name + "]" + "�ĵ�" + (currentAction) + "����ʧ��:" + cmd.body);
+                LogUtil.debug(testCase, "[" + testCase.name + "]" + "第" + excuteTime + "执行" + "[" + name + "]" + "步骤中第" + (currentAction) + "个操作失败:" + cmd.body);
                 currentAction = -1;
                 return null;
             } else {
@@ -58,9 +57,6 @@ public class TestCaseStep {
                         node = assetModel.getNext();
                         if (node == null) {
                             excuteTime = excuteTime + 1;
-                            // LogUtil.debug(testCase, "[" + testCase.name + "]"
-                            // + "��" + excuteTime + "��ִ��" + "[" + name + "]��" +
-                            // (assetModel.currentOffset) + "������֤ʧ��");
                             assetModel.goToFail();
                             currentAction = -1;
                             return null;
@@ -71,14 +67,14 @@ public class TestCaseStep {
                             currentAction = -1;
                             return null;
                         }
-                        LogUtil.debug(testCase, "[" + testCase.name + "]" + "��" + excuteTime + "��ִ��" + "[" + name + "]" + "ȱ�� ��ָ֤��");
+                        LogUtil.debug(testCase, "[" + testCase.name + "]" + "第" + excuteTime + "执行" + "[" + name + "]" + "无验证条件");
                         currentAction = -1;
                         return null;
                     }
                 } else {
                     node = actions.get(currentAction);
                 }
-                LogUtil.debug(testCase, "[" + testCase.name + "]ִ��" + "[" + node.strValue + "]");
+                LogUtil.debug(testCase, "[" + testCase.name + "]进入" + "[" + node.strValue + "]");
                 node.creatActionCommand(nextNode, cmd, lastNode);
                 if (node.action == AndroidActionCommandType.WAIT) {
                     if (node.arg.isEmpty()) {
@@ -107,7 +103,6 @@ public class TestCaseStep {
             if (cmd.result == 0) {
                 node = assetModel.asset(cmd.body);
             } else {
-                // ʧ��
                 if (name.equals("waitProcess")) {
                     currentAction = -1;
                     return null;
@@ -116,16 +111,14 @@ public class TestCaseStep {
             }
             if (node == null) {
                 if (testCase.caseStepArray.size() > 1) {
-                    // ����waitProcess
-                    LogUtil.debug(testCase, "[" + testCase.name + "]" + "���� waitProcess");
+                    LogUtil.debug(testCase, "[" + testCase.name + "]" + "进入waitProcess");
                 } else {
-                    // ��������step
                     excuteTime = excuteTime + 1;
                     currentAction = -1;
                 }
                 return null;
             } else {
-                LogUtil.debug(testCase, "[" + testCase.name + "]ִ��" + "[" + node.strValue + "]");
+                LogUtil.debug(testCase, "[" + testCase.name + "]ִ进入" + "[" + node.strValue + "]");
                 node.creatActionCommand(nextNode, cmd, new TestCaseNode(testCase));
                 if (node.action == AndroidActionCommandType.WAIT) {
                     if (node.arg.isEmpty()) {

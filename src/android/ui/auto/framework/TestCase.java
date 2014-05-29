@@ -42,7 +42,6 @@ public class TestCase {
         String value = properties.getProperty(key, "");
         String str = null;
         try {
-            // ���б���ת�����������
             str = new String(value.getBytes("ISO8859-1"), "UTF-8");
         } catch (UnsupportedEncodingException e) {
             // TODO Auto-generated catch block
@@ -153,7 +152,7 @@ public class TestCase {
                 }
             }
         } else {
-            System.out.println("Case ����ʧ��");
+            System.out.println("Case ???????");
         }
     }
 
@@ -181,7 +180,6 @@ public class TestCase {
                         AndroidActionCommand androidActionCommand = new AndroidActionCommand();
                         androidActionCommand.result = 1;
                         if (currentStep.assetModel != null) {
-                            //תȦ����󣬳�ʱʱ����ԭ��6s����Ϊ3s
                             currentStep.assetModel.startTime = System.currentTimeMillis() - 3 * 1000;
                         }
                         actionCommand = currentStep.runNextNode(androidActionCommand);
@@ -199,9 +197,9 @@ public class TestCase {
 
     public synchronized void reset(boolean start) {
         if (start) {
-            LogUtil.error(this, "��ʼ ���� case״̬����");
+            LogUtil.error(this, "开始测试 case回置");
         } else {
-            LogUtil.error(this, "���� ���� case״̬����");
+            LogUtil.error(this, "结束测试 case回置");
         }
         caseStepArray.clear();
         deviceName = "";

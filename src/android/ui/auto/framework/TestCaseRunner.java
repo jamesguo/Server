@@ -35,7 +35,7 @@ public class TestCaseRunner {
             @Override
             public void run() {
                 listener();
-                LogUtil.error(testCase, "=======================�ָ���=========================");
+                LogUtil.error(testCase, "=======================分割线=========================");
                 // testCase.reset(false);
                 try {
                     client.close();
@@ -44,7 +44,6 @@ public class TestCaseRunner {
                 }
             }
         }, "TestCaseRunnerListener" + LogUtil.getFormatTime() + testCase.name).start();
-        LogUtil.error(testCase, "��ʼִ��Case Step ������ʣ��" + testCase.caseStepArray.size() + "����������һ������Ϊ" + (testCase.caseStepArray.size() > 0 ? ("" + testCase.caseStepArray.peek().name) : ""));
         runCommand(new AndroidActionCommand());
 
     }

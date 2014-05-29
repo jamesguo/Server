@@ -43,7 +43,7 @@ public class AssetModel extends TestCaseNode {
     }
 
     public void goToFail() {
-        LogUtil.debug(testCase, "[" + testCase.name + "]" + "ȫ��������֤ʧ��");
+        LogUtil.debug(testCase, "[" + testCase.name + "]" + "全部验证失败");
         testCase.caseStepArray.add(testCase.getStep(errorStep));
     }
 

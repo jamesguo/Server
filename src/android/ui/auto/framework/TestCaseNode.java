@@ -80,7 +80,7 @@ public class TestCaseNode {
             arg = GlobalContent.getConfig(arg, testCase.deviceOS);
         }
         if (arg == null) {
-            LogUtil.error(testCase, "��" + nextNode.SeqNo + "��������������");
+            LogUtil.error(testCase, "［" + nextNode.SeqNo + "］操作内容为空");
             return;
         }
         nextNode.actionCode = action;
@@ -100,7 +100,7 @@ public class TestCaseNode {
                         jsonObject.put("action", "click");
                     }
                 } else {
-                    LogUtil.error(testCase, "��" + nextNode.SeqNo + "�����������clickǰ���Ȳ���Ԫ��");
+                    LogUtil.error(testCase, "［" + nextNode.SeqNo + "］click前需要先查找");
                 }
                 break;
             case AndroidActionCommandType.FIND:
@@ -166,7 +166,7 @@ public class TestCaseNode {
                         jsonObject.put("action", "wait to disappear");
                     }
                 } else {
-                    LogUtil.error(testCase, "��" + nextNode.SeqNo + "�����������wait to disappearǰ���Ȳ���Ԫ��");
+                    LogUtil.error(testCase, "［" + nextNode.SeqNo + "］wait to disappear需要先查找");
                 }
                 break;
             case AndroidActionCommandType.PRESSKEY:
@@ -186,7 +186,6 @@ public class TestCaseNode {
                     paramObject.put("text", arg);
                     jsonObject.put("params", paramObject.toString());
                     jsonObject.put("action", "presskey");
-                    // LogUtil.error("��" + nextNode.SeqNo + "�����������pressǰ���Ȳ���Ԫ��");
                 }
                 break;
             case AndroidActionCommandType.VIEWDUMP:
