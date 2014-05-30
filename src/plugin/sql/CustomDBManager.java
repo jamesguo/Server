@@ -2,9 +2,11 @@ package plugin.sql;
 
 
 import java.sql.SQLException;
+
+import plugin.sql.config.SQLConfig;
 import plugin.sql.util.ConnectionPool.PooledConnection;
 import plugin.sql.util.ConnectionPool;
-import plugin.sql.config.Config;
+
 /**
  * Created by yrguo on 14-5-28.
  */
@@ -27,8 +29,8 @@ public class CustomDBManager {
     public CustomDBManager() {
         if (inst != null)
             return;
-        String connStr = String.format("jdbc:mysql://%s:%d/%s?useUnicode=true&characterEncoding=UTF-8", Config.getInstance().mysqlHost, Config.getInstance().mysqlPort, Config.getInstance().mysqlDB);
-        connectionPool = new ConnectionPool("com.mysql.jdbc.Driver", connStr, Config.getInstance().mysqlUser, Config.getInstance().mysqlPassword);
+        String connStr = String.format("jdbc:mysql://%s:%d/%s?useUnicode=true&characterEncoding=UTF-8", SQLConfig.getInstance().mysqlHost, SQLConfig.getInstance().mysqlPort, SQLConfig.getInstance().mysqlDB);
+        connectionPool = new ConnectionPool("com.mysql.jdbc.Driver", connStr, SQLConfig.getInstance().mysqlUser, SQLConfig.getInstance().mysqlPassword);
         try {
             connectionPool.createPool();
             inst = this;

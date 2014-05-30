@@ -15,7 +15,7 @@ public class DeviceInfoManager {
     public static void insertDeviceInfo(DeviceInfoModel deviceInfoModel) {
         ConnectionPool.PooledConnection conn = CustomDBManager.getConnection();
         try {
-            String sql = "INSERT INTO DeviceInfoTable (device_name,device_os,device_height,device_width,device_version) VALUES ('" + deviceInfoModel.device_name + "','" + deviceInfoModel.device_os + "','" + deviceInfoModel.device_height + "','" + deviceInfoModel.device_width + "','" + deviceInfoModel.device_version + "');";
+            String sql = "REPLACE INTO DeviceInfoTable (device_name,device_os,device_height,device_width,device_version) VALUES ('" + deviceInfoModel.device_name + "','" + deviceInfoModel.device_os + "','" + deviceInfoModel.device_height + "','" + deviceInfoModel.device_width + "','" + deviceInfoModel.device_version + "');";
             conn.executeUpdate(sql);
         } catch (Exception e) {
             e.printStackTrace();
