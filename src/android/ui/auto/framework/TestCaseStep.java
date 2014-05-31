@@ -33,7 +33,6 @@ public class TestCaseStep {
                 // 失败
                 if (name.equals("waitProcess")) {
                     currentAction = -1;
-                    LogUtil.debug(testCase, "[" + testCase.name + "]" + "[" + name + "]" + "回置currentAction 1");
                     return null;
                 }
                 if (errorModel == null) {
@@ -42,7 +41,6 @@ public class TestCaseStep {
                 errorModel.goError();
                 excuteTime = excuteTime + 1;
                 LogUtil.debug(testCase, "[" + testCase.name + "]" + "第" + excuteTime + "执行" + "[" + name + "]" + "步骤中第" + (currentAction) + "个操作失败:" + cmd.body);
-                LogUtil.debug(testCase, "[" + testCase.name + "]" + "[" + name + "]" + "回置currentAction 2");
                 currentAction = -1;
                 return null;
             } else {
@@ -60,7 +58,6 @@ public class TestCaseStep {
                         if (node == null) {
                             excuteTime = excuteTime + 1;
                             assetModel.goToFail();
-                            LogUtil.debug(testCase, "[" + testCase.name + "]" + "[" + name + "]" + "回置currentAction 3");
                             currentAction = -1;
                             return null;
                         }
@@ -71,7 +68,6 @@ public class TestCaseStep {
                             return null;
                         }
                         LogUtil.debug(testCase, "[" + testCase.name + "]" + "第" + excuteTime + "执行" + "[" + name + "]" + "无验证条件");
-                        LogUtil.debug(testCase, "[" + testCase.name + "]" + "[" + name + "]" + "回置currentAction 4");
                         currentAction = -1;
                         return null;
                     }
@@ -118,7 +114,6 @@ public class TestCaseStep {
                     LogUtil.debug(testCase, "[" + testCase.name + "]" + "进入waitProcess");
                 } else {
                     excuteTime = excuteTime + 1;
-                    LogUtil.debug(testCase, "[" + testCase.name + "]" + "[" + name + "]" + "回置currentAction 5");
                     currentAction = -1;
                 }
                 return null;

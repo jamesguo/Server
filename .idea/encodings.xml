@@ -3,7 +3,6 @@
   <component name="Encoding" useUTFGuessing="true" native2AsciiForPropertiesFiles="false" defaultCharsetForPropertiesFiles="UTF-8">
     <file url="file://$PROJECT_DIR$/src/android/ui/auto/framework/AutoServer.java" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/src/android/ui/auto/framework/TestCase.java" charset="UTF-8" />
-    <file url="file://$PROJECT_DIR$/src/auto/server/core/AutoServer.java" charset="UTF-8" />
   </component>
 </project>
 
