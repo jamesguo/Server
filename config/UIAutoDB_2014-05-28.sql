@@ -7,7 +7,7 @@
 #
 # Host: 127.0.0.1 (MySQL 5.6.17)
 # Database: AutoTestDB
-# Generation Time: 2014-05-30 10:51:18 +0000
+# Generation Time: 2014-06-03 03:14:49 +0000
 # ************************************************************
 
 
@@ -94,7 +94,7 @@ VALUES
 	(5,'$SorryLoadFail','抱歉','抱歉','James'),
 	(6,'$Know','知道了','知道了','James'),
 	(7,'$RWFromFlightInfo','国航CA1858','国航CA1858 330大','James'),
-	(8,'$RWBackFlightInfo','国航CA1831','国航CA1831 33A大','James'),
+	(8,'$RWBackFlightInfo','国航CA1831','国航CA1831 330大','James'),
 	(9,'$DeletePerson','f3_button_person_list_select','icon del2','James'),
 	(10,'$AddPerson','f3_boarding_person','btn flightadd','James'),
 	(11,'$ContactPhone','EditText','UITextField','James'),
@@ -159,7 +159,27 @@ VALUES
 	(23,1,29,'iPhone Simulator',3,'/Users/yrguo/work/UIAutoServer/TestResult/国内往返/iPhone Simulator/2014-05-30-18-47-10','2014-05-30 18:47:10','2014-05-30 18:47:21'),
 	(26,1,29,'iPhone Simulator',2,'/Users/yrguo/work/UIAutoServer/TestResult/国内往返/iPhone Simulator/2014-05-30-18-47-47','2014-05-30 18:47:47','2014-05-30 18:48:54'),
 	(28,1,29,'iPhone Simulator',2,'/Users/yrguo/work/UIAutoServer/TestResult/国内往返/iPhone Simulator/2014-05-30-18-48-54','2014-05-30 18:48:54','2014-05-30 18:50:25'),
-	(29,1,29,'iPhone Simulator',1,'/Users/yrguo/work/UIAutoServer/TestResult/国内往返/iPhone Simulator/2014-05-30-18-50-25','2014-05-30 18:50:25','2014-05-30 18:50:25');
+	(30,1,29,'iPhone Simulator',2,'/Users/yrguo/work/UIAutoServer/TestResult/国内往返/iPhone Simulator/2014-05-30-18-50-25','2014-05-30 18:50:25','2014-05-30 18:51:25'),
+	(31,1,29,'iPhone Simulator',1,'/Users/yrguo/work/UIAutoServer/TestResult/国内往返/iPhone Simulator/2014-05-30-18-51-26','2014-05-30 18:51:26','2014-05-30 18:51:26'),
+	(60,1,29,'GT-I9300-4df169d452a65fb7',2,'/Users/yrguo/work/UIAutoServer/TestResult/国内往返/GT-I9300-4df169d452a65fb7/2014-06-03-11-03-23','2014-06-03 11:03:23','2014-06-03 11:04:30'),
+	(63,1,29,'iPhone Simulator',3,'/Users/yrguo/work/UIAutoServer/TestResult/国内往返/iPhone Simulator/2014-06-03-11-04-50','2014-06-03 11:04:50','2014-06-03 11:05:11'),
+	(65,1,29,'iPhone Simulator',3,'/Users/yrguo/work/UIAutoServer/TestResult/国内往返/iPhone Simulator/2014-06-03-11-05-12','2014-06-03 11:05:12','2014-06-03 11:05:32'),
+	(66,1,29,'GT-I9300-4df169d452a65fb7',2,'/Users/yrguo/work/UIAutoServer/TestResult/国内往返/GT-I9300-4df169d452a65fb7/2014-06-03-11-04-31','2014-06-03 11:04:31','2014-06-03 11:05:36'),
+	(67,1,29,'iPhone Simulator',1,'/Users/yrguo/work/UIAutoServer/TestResult/国内往返/iPhone Simulator/2014-06-03-11-05-32','2014-06-03 11:05:32','2014-06-03 11:05:32'),
+	(68,1,29,'GT-I9300-4df169d452a65fb7',1,'/Users/yrguo/work/UIAutoServer/TestResult/国内往返/GT-I9300-4df169d452a65fb7/2014-06-03-11-05-37','2014-06-03 11:05:37','2014-06-03 11:05:37'),
+	(69,1,29,'GT-I9300-4df169d452a65fb7',1,'/Users/yrguo/work/UIAutoServer/TestResult/国内往返/GT-I9300-4df169d452a65fb7/2014-06-03-11-06-56','2014-06-03 11:06:56','2014-06-03 11:06:56'),
+	(71,1,29,'iPhone Simulator',3,'/Users/yrguo/work/UIAutoServer/TestResult/国内往返/iPhone Simulator/2014-06-03-11-07-02','2014-06-03 11:07:02','2014-06-03 11:07:23'),
+	(73,1,29,'iPhone Simulator',3,'/Users/yrguo/work/UIAutoServer/TestResult/国内往返/iPhone Simulator/2014-06-03-11-07-23','2014-06-03 11:07:23','2014-06-03 11:07:43'),
+	(74,1,29,'iPhone Simulator',1,'/Users/yrguo/work/UIAutoServer/TestResult/国内往返/iPhone Simulator/2014-06-03-11-07-43','2014-06-03 11:07:43','2014-06-03 11:07:43'),
+	(77,1,29,'GT-I9300-4df169d452a65fb7',2,'/Users/yrguo/work/UIAutoServer/TestResult/国内往返/GT-I9300-4df169d452a65fb7/2014-06-03-11-09-04','2014-06-03 11:09:04','2014-06-03 11:10:18'),
+	(78,1,29,'iPhone Simulator',2,'/Users/yrguo/work/UIAutoServer/TestResult/国内往返/iPhone Simulator/2014-06-03-11-08-56','2014-06-03 11:08:56','2014-06-03 11:10:22'),
+	(81,1,29,'iPhone Simulator',2,'/Users/yrguo/work/UIAutoServer/TestResult/国内往返/iPhone Simulator/2014-06-03-11-10-24','2014-06-03 11:10:24','2014-06-03 11:11:22'),
+	(82,1,29,'GT-I9300-4df169d452a65fb7',2,'/Users/yrguo/work/UIAutoServer/TestResult/国内往返/GT-I9300-4df169d452a65fb7/2014-06-03-11-10-19','2014-06-03 11:10:19','2014-06-03 11:11:22'),
+	(85,1,29,'iPhone Simulator',2,'/Users/yrguo/work/UIAutoServer/TestResult/国内往返/iPhone Simulator/2014-06-03-11-11-22','2014-06-03 11:11:22','2014-06-03 11:12:18'),
+	(87,1,29,'GT-I9300-4df169d452a65fb7',2,'/Users/yrguo/work/UIAutoServer/TestResult/国内往返/GT-I9300-4df169d452a65fb7/2014-06-03-11-11-27','2014-06-03 11:11:27','2014-06-03 11:12:30'),
+	(89,1,29,'iPhone Simulator',2,'/Users/yrguo/work/UIAutoServer/TestResult/国内往返/iPhone Simulator/2014-06-03-11-12-18','2014-06-03 11:12:18','2014-06-03 11:13:15'),
+	(90,1,29,'iPhone Simulator',1,'/Users/yrguo/work/UIAutoServer/TestResult/国内往返/iPhone Simulator/2014-06-03-11-13-15','2014-06-03 11:13:15','2014-06-03 11:13:15'),
+	(91,1,29,'GT-I9300-4df169d452a65fb7',2,'/Users/yrguo/work/UIAutoServer/TestResult/国内往返/GT-I9300-4df169d452a65fb7/2014-06-03-11-12-30','2014-06-03 11:12:30','2014-06-03 11:13:39');
 
 /*!40000 ALTER TABLE `CaseResult` ENABLE KEYS */;
 UNLOCK TABLES;
@@ -235,7 +255,8 @@ LOCK TABLES `DeviceInfoTable` WRITE;
 
 INSERT INTO `DeviceInfoTable` (`id`, `device_name`, `device_os`, `device_height`, `device_width`, `device_version`)
 VALUES
-	(27,'iPhone Simulator','IOS',0,0,'7.0.3');
+	(59,'GT-I9300-4df169d452a65fb7','Android',1280,720,'19'),
+	(60,'iPhone Simulator','IOS',0,0,'7.0.3');
 
 /*!40000 ALTER TABLE `DeviceInfoTable` ENABLE KEYS */;
 UNLOCK TABLES;

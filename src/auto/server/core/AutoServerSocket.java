@@ -23,9 +23,9 @@ public class AutoServerSocket {
         while (!AutoServer.allCaseFinished) {
             try {
                 Socket client = serverSocket.accept();
-                //60s超时，防止程序卡死
-                client.setSoTimeout(0);
-//                client.setSoTimeout(60 * 1000);
+                //60s超时，防止网络中断，程序卡死
+//                client.setSoTimeout(0);
+                client.setSoTimeout(60 * 1000);
                 final TestCase testCase = AutoServer.getReadyTestCase();
                 final Socket oneClient = client;
                 if (testCase != null) {
