@@ -21,7 +21,7 @@ public class AutoServer {
 
     public static void main(String[] args) {
         loadAllTestCase();
-        int port = 6100;
+        int port = 5389;
         try {
             port = Integer.valueOf(ServerConfig.getConfig("ServerPort"));
         } catch (Exception e) {
@@ -39,10 +39,9 @@ public class AutoServer {
 
     public static synchronized TestCase getReadyTestCase() {
         if (testCases.size() > 0) {
-            TestCase testCase = testCases.get(0).cloneCase();
-            // TestCase testCase = testCases.remove(0);
-            // runningTest.add(testCase);
-
+//            TestCase testCase = testCases.get(0).cloneCase();
+            TestCase testCase = testCases.remove(0).cloneCase();
+            runningTest.add(testCase);
             return testCase;
         }
         return null;
@@ -54,7 +53,9 @@ public class AutoServer {
             Collection<TestCaseModel> testCaseModels = batchModel.testCaseModels.values();
             for (TestCaseModel testCaseModel:testCaseModels){
                 TestCase testCase = new TestCase(batchModel,testCaseModel);
-                testCases.add(testCase);
+                if(!testCase.testSteps.isEmpty()){
+                    testCases.add(testCase);
+                }
             }
         }
     }

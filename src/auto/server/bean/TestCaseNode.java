@@ -56,6 +56,8 @@ public class TestCaseNode {
                             // TODO Auto-generated catch block
                             e.printStackTrace();
                         }
+                    }else{
+                        LogUtil.error(testCase, "［" + arg + "］图片内容为空");
                     }
                 }
             }).start();
