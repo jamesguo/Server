@@ -155,7 +155,7 @@ public class TestCaseStep {
                 }
                 return null;
             } else {
-                LogUtil.debug(testCase, "[" + testCase.name + "]ִ进入" + "[" + node.strValue + "]");
+                LogUtil.debug(testCase, "[" + testCase.name +"]进入" + "[" + node.strValue + "]");
                 node.creatActionCommand(nextNode, cmd, new TestCaseNode(testCase));
                 if (node.action == AndroidActionCommandType.WAIT) {
                     if (node.arg.isEmpty()) {

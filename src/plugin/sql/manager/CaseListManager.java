@@ -1,12 +1,10 @@
 package plugin.sql.manager;
 
-import android.ui.auto.framework.TestCaseStep;
 import plugin.sql.CustomDBManager;
 import plugin.sql.bean.TestCaseModel;
 import plugin.sql.bean.TestCaseStepModel;
 import plugin.sql.util.ConnectionPool;
 
-import java.nio.charset.Charset;
 import java.sql.ResultSet;
 import java.util.ArrayList;
 
