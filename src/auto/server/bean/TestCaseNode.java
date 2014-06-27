@@ -86,7 +86,7 @@ public class TestCaseNode {
             deviceInfoModel.device_width = json.optInt("width");
             DeviceInfoManager.insertDeviceInfo(deviceInfoModel);
             testCase.excuteResultModel.device_name = testCase.deviceName;
-            testCase.excuteResultModel.case_result_path = fileDir.getAbsolutePath();
+            testCase.excuteResultModel.case_result_path = fileDir.getAbsolutePath().replaceAll("\\\\","/");
             CaseResultManager.replaceExcuteResult(testCase.excuteResultModel);
         }
 
