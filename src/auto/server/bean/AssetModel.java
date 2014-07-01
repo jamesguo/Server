@@ -80,6 +80,7 @@ public class AssetModel extends TestCaseNode {
             String windows = jsonObject.optString("windows");
             JSONArray jsonArray = new JSONArray(windows);
             if (jsonArray != null) {
+                System.out.println(jsonArray.toString());
                 ArrayList<String> keys = new ArrayList<String>();
                 for (TestCaseNode caseNode : caseNodes) {
                     if (caseNode.arg.equals("")) {
@@ -120,7 +121,6 @@ public class AssetModel extends TestCaseNode {
 
     public int isContainValue(JSONArray jsonArray, ArrayList<String> keys) {
         int count = jsonArray.length();
-        System.out.println(jsonArray.toString());
         for (int index = 0; index < count; index++) {
             JSONObject jsonObject = jsonArray.getJSONObject(index);
             String classAllInfo = jsonObject.optString("class", "");
