@@ -26,7 +26,8 @@ public class AutoServerSocket {
                 //60s超时，防止网络中断，程序卡死
 //                client.setSoTimeout(0);
                 client.setSoTimeout(60 * 1000);
-                final TestCase testCase = AutoServer.getReadyTestCase();
+                System.out.println(client.getInetAddress().getHostAddress()+":"+client.getPort());
+                final TestCase testCase = AutoServer.getReadyTestCase(client.getLocalAddress().getHostAddress());
                 final Socket oneClient = client;
                 if (testCase != null) {
                     new TestCaseThread(testCase, oneClient).start();

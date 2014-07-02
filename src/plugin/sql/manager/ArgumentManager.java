@@ -154,6 +154,13 @@ public class ArgumentManager {
                 return model.getValue(os);
             }
         }
+        valueHashMap = argumentHashMap.get("all");
+        if(valueHashMap!=null){
+            ArgumentModel model =  valueHashMap.get(argumentName);
+            if(model!=null){
+                return model.getValue(os);
+            }
+        }
         return "";
     }
     public static void insertArgument(ArrayList<ArgumentModel> argumentModels){

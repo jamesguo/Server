@@ -11,9 +11,6 @@ import plugin.sql.util.ConnectionPool;
  * Created by yrguo on 14-5-28.
  */
 public class CustomDBManager {
-    String url = "jdbc:mysql://127.0.0.1:3306/AutoTestDB";
-    String user = "root";
-    String password = "";
     private static PooledConnection conn;
     private static ConnectionPool connectionPool;
     private static CustomDBManager inst;

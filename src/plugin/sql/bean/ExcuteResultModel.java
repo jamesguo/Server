@@ -1,6 +1,7 @@
 package plugin.sql.bean;
 
 import auto.server.log.LogUtil;
+import auto.server.util.TypeConvertUtil;
 
 import java.sql.Date;
 
@@ -25,7 +26,7 @@ public class ExcuteResultModel {
     public String device_name = "";
     public Excute_State case_excute_state=Excute_State.INIT;
     public String case_result_path = "";
-    public String case_start_time = LogUtil.getFormatTime() ;
-    public String case_end_time = LogUtil.getFormatTime();
+    public String case_start_time = TypeConvertUtil.getFormatTime() ;
+    public String case_end_time = TypeConvertUtil.getFormatTime();
 }
 

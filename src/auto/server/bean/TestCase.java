@@ -24,7 +24,7 @@ import java.util.concurrent.TimeUnit;
  * Created by yrguo on 14-5-30.
  */
 public class TestCase {
-    public String identify;
+    public String identify = TypeConvertUtil.getFormatImageTime();
     public String startTime;
     public String name;
     public String outPath;
@@ -48,11 +48,11 @@ public class TestCase {
             TestCaseStep testCaseStep = new TestCaseStep(this, caseStepModel);
             testSteps.put(caseStepModel.step_name, testCaseStep);
         }
-        startTime = LogUtil.getFormatTime();
+        startTime = TypeConvertUtil.getFormatTime();
         excuteResultModel = new ExcuteResultModel();
         excuteResultModel.batch_number = batchModel.batch_number;
         excuteResultModel.case_number = testCaseModel.case_number;
-        excuteResultModel.case_start_time = LogUtil.getFormatTime();
+        excuteResultModel.case_start_time = TypeConvertUtil.getFormatTime();
         excuteResultModel.case_excute_state = ExcuteResultModel.Excute_State.INIT;
     }
     public synchronized void startCase() {
@@ -97,11 +97,11 @@ public class TestCase {
                     } else {
                         if(currentStep.name.equals("success")){
                             excuteResultModel.case_excute_state = ExcuteResultModel.Excute_State.SUCCESS;
-                            excuteResultModel.case_end_time =  LogUtil.getFormatTime();
+                            excuteResultModel.case_end_time =  TypeConvertUtil.getFormatTime();
                             CaseResultManager.replaceExcuteResult(excuteResultModel);
                         }else if(currentStep.name.equals("error")){
                             excuteResultModel.case_excute_state = ExcuteResultModel.Excute_State.FAIL;
-                            excuteResultModel.case_end_time =  LogUtil.getFormatTime();
+                            excuteResultModel.case_end_time =  TypeConvertUtil.getFormatTime();
                             CaseResultManager.replaceExcuteResult(excuteResultModel);
                         }
                         actionCommand = currentStep.runNextNode(new AndroidActionCommand());

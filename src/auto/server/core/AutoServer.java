@@ -10,11 +10,15 @@ import plugin.sql.manager.BatchManager;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.HashMap;
 
 public class AutoServer {
     public static boolean allCaseFinished = false;
     public static ArrayList<TestCase> testCases = new ArrayList<TestCase>();
     public static ArrayList<TestCase> runningTest = new ArrayList<TestCase>();
+    public static ArrayList<BatchModel> batchModels = new ArrayList<BatchModel>();
+    public static HashMap<String ,ArrayList<TestCase>> caseInfo = new HashMap<String ,ArrayList<TestCase>>();
+    public static HashMap<String ,ArrayList<TestCase>> caseRunnindInfo = new HashMap<String ,ArrayList<TestCase>>();
     public static long TIMEOUT = 6;
 
     public AutoServerSocket server;
@@ -36,7 +40,22 @@ public class AutoServer {
             e.printStackTrace();
         }
     }
-
+    public static synchronized TestCase getReadyTestCase(String url) {
+        if(!caseInfo.containsKey(url)){
+            ArrayList<TestCase> cases = new ArrayList<TestCase>();
+            cases.addAll(testCases);
+            caseInfo.put(url,cases);
+            caseRunnindInfo.put(url,new ArrayList<TestCase>());
+        }
+        ArrayList<TestCase> allCases  =  caseInfo.get(url);
+        if (allCases.size() > 0) {
+//            TestCase testCase = allCases.get(0).cloneCase();
+            TestCase testCase = allCases.remove(0);
+            caseRunnindInfo.get(url).add(testCase);
+            return testCase;
+        }
+        return null;
+    }
     public static synchronized TestCase getReadyTestCase() {
         if (testCases.size() > 0) {
             TestCase testCase = testCases.get(0).cloneCase();
@@ -49,7 +68,7 @@ public class AutoServer {
     }
 
     public static void loadAllTestCase() {
-        ArrayList<BatchModel> batchModels = BatchManager.getBatchList();
+        batchModels = BatchManager.getBatchList();
         for (BatchModel batchModel:batchModels){
             Collection<TestCaseModel> testCaseModels = batchModel.testCaseModels.values();
             for (TestCaseModel testCaseModel:testCaseModels){

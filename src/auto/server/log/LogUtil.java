@@ -1,6 +1,7 @@
 package auto.server.log;
 
 import auto.server.bean.TestCase;
+import auto.server.util.TypeConvertUtil;
 
 import java.io.*;
 import java.text.SimpleDateFormat;
@@ -10,19 +11,19 @@ public class LogUtil {
     private static String suffix = "[/UIAUTO]";
 
     public static void info(TestCase testCase, String string) {
-        String log = getFormatTime()+ prefix + " [info] " + string + suffix;
+        String log = TypeConvertUtil.getFormatTime()+ prefix + " [info] " + string + suffix;
         System.out.println(log);
         writeToFile(testCase, log);
     }
 
     public static void error(TestCase testCase, String string) {
-        String log = getFormatTime() + prefix + " [error] " + string + suffix;
+        String log = TypeConvertUtil.getFormatTime() + prefix + " [error] " + string + suffix;
         System.out.println(log);
         writeToFile(testCase, log);
     }
 
     public static void debug(TestCase testCase, String string) {
-        String log = getFormatTime() + prefix + " [debug] " + string + suffix;
+        String log = TypeConvertUtil.getFormatTime() + prefix + " [debug] " + string + suffix;
         System.out.println(log);
         writeToFile(testCase, log);
     }
@@ -50,8 +51,6 @@ public class LogUtil {
         }
     }
 
-    public static String getFormatTime() {
-        return new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(System.currentTimeMillis());
-    }
+
 
 }

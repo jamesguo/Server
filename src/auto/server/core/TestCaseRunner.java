@@ -43,7 +43,7 @@ public class TestCaseRunner {
                 // testCase.reset(false);
                 if(testCase.excuteResultModel.case_excute_state== ExcuteResultModel.Excute_State.RUNNING){
                     testCase.excuteResultModel.case_excute_state = ExcuteResultModel.Excute_State.FAIL;
-                    testCase.excuteResultModel.case_end_time =  LogUtil.getFormatTime();
+                    testCase.excuteResultModel.case_end_time =  TypeConvertUtil.getFormatTime();
                     CaseResultManager.replaceExcuteResult(testCase.excuteResultModel);
                 }
                 try {
@@ -52,7 +52,7 @@ public class TestCaseRunner {
                     e.printStackTrace();
                 }
             }
-        }, "TestCaseRunnerListener" + LogUtil.getFormatTime() + testCase.name).start();
+        }, "TestCaseRunnerListener" + TypeConvertUtil.getFormatTime() + testCase.name).start();
         runCommand(new AndroidActionCommand());
 
     }

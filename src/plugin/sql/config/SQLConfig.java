@@ -5,11 +5,13 @@ package plugin.sql.config;
  */
 public class SQLConfig {
     private static SQLConfig SQLConfigInstance;
-    public String mysqlHost = "10.2.254.204";
+//    public String mysqlHost = "10.2.254.204";
+    public String mysqlHost = "172.16.156.82";
     public int mysqlPort = 3306;
     public String mysqlDB = "uiautodb";
     public String mysqlUser = "root";
-    public String mysqlPassword = "liuwj";
+//    public String mysqlPassword = "liuwj";
+    public String mysqlPassword = "root";
 
     public static SQLConfig getInstance() {
         if (SQLConfigInstance == null) {

@@ -95,6 +95,7 @@ public class AssetModel extends TestCaseNode {
                 int index = isContainValue(jsonArray, keys);
                 if (index != -1 && index < caseNodes.size()) {
                     TestCaseNode caseNode = caseNodes.get(index);
+                    LogUtil.debug(testCase, "[" + testCase.name + "]第"+index+"验证通过"+"{"+caseNode.strValue+"}");
                     testCase.caseStepArray.add(testCase.getStep(caseNode.args[1].trim().replace("goto:", "")));
                     if (caseNode.args[1].trim().replace("goto:", "").equals("waitProcess")) {
                         testCase.caseStepArray.add(testCase.currentStep);
@@ -120,6 +121,9 @@ public class AssetModel extends TestCaseNode {
     }
 
     public int isContainValue(JSONArray jsonArray, ArrayList<String> keys) {
+        for(String key:keys){
+
+        }
         int count = jsonArray.length();
         for (int index = 0; index < count; index++) {
             JSONObject jsonObject = jsonArray.getJSONObject(index);

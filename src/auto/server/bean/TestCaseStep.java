@@ -135,6 +135,7 @@ public class TestCaseStep {
 
             TestCaseNode node;
             if (cmd.result == 0) {
+                LogUtil.debug(testCase, "[" + testCase.name + "][" + name + "]dump成功");
                 node = assetModel.asset(cmd.body);
             } else {
                 if (name.equals("waitProcess")) {
